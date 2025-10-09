@@ -1,14 +1,675 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research Roadmap: Digital & AI Pathology Review Article</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Harmony -->
+    <!-- Application Structure Plan: The SPA is structured as a linear, scrollable research guide that mirrors the logical flow of a review article. It starts with a high-level introduction, moves to historical context, delves into core technologies and AI integration, explores specific applications, and concludes with challenges and future directions. This top-down structure helps the user build foundational knowledge before tackling complex applications. A sticky navigation bar allows non-linear access to sections, catering to users who want to jump to specific areas. Key interactions include clickable timeline events, filterable application examples, and dynamic chart updates, all designed to make the dense research topic digestible and to help the user identify key areas for their own article. -->
+    <!-- Visualization & Content Choices: 
+        - Historical Timeline: Report Info -> Key historical events. Goal -> Show progression. Viz -> Interactive vertical timeline using styled HTML/JS. Interaction -> Click event on items to reveal details. Justification -> Visually intuitive way to understand history. Method -> HTML/CSS/JS.
+        - AI Workflow Diagram: Report Info -> Steps in an AI pathology pipeline. Goal -> Explain a process. Viz -> Flowchart diagram. Interaction -> Hover/click to highlight stages and see explanations. Justification -> Simplifies a complex technical process. Method -> HTML/Tailwind Flexbox.
+        - Research Applications: Report Info -> Various uses of AI in pathology. Goal -> Organize and compare applications. Viz -> Filterable grid of cards and a dynamic bar chart. Interaction -> Filtering by 'Disease' and 'Task'. Chart and text update dynamically. Justification -> Allows user to explore the breadth of research and see publication trends, directly informing their review's scope. Library -> Chart.js for the chart, Vanilla JS for filtering logic.
+        - Challenges: Report Info -> Obstacles in the field. Goal -> Inform about current issues. Viz -> Interactive accordion/list. Interaction -> Click to expand sections. Justification -> Cleanly organizes distinct topics. Method -> HTML/JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #4A4A4A;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #8C6A5D;
+            border-bottom-color: #8C6A5D;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -21px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: #D3C5BC;
+            border: 2px solid #FDFBF8;
+        }
+        .timeline-item.active::before {
+            background-color: #8C6A5D;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 450px;
+            }
+        }
+    </style>
 </head>
-<body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+<body class="antialiased">
+
+    <header id="header" class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <span class="text-lg font-bold text-[#8C6A5D]">Research Roadmap</span>
+                </div>
+                <div class="hidden md:block">
+                    <div id="nav-links" class="ml-10 flex items-baseline space-x-4">
+                        <a href="#introduction" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Introduction</a>
+                        <a href="#history" class="nav-link px-3 py-2 rounded-md text-sm font-medium">History</a>
+                        <a href="#technology" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Technology</a>
+                        <a href="#ai-integration" class="nav-link px-3 py-2 rounded-md text-sm font-medium">AI Integration</a>
+                        <a href="#applications" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Applications</a>
+                        <a href="#abstract-generator" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Drafting Assistant</a>
+                        <a href="#challenges" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Challenges</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        
+        <section id="introduction" class="text-center mb-16 md:mb-24 scroll-mt-20">
+            <h1 class="text-3xl md:text-5xl font-bold text-[#4A4A4A] tracking-tight">Advances and History of Digital Pathology and AI Integration</h1>
+            <p class="mt-4 md:mt-6 max-w-3xl mx-auto text-lg text-gray-600">A structured guide to researching and writing a comprehensive review article on the intersection of pathology, digital imaging, and artificial intelligence in diagnosis and prognosis.</p>
+             <p class="mt-4 max-w-3xl mx-auto text-base text-gray-500">This interactive roadmap is designed to help you navigate the key domains of this rapidly evolving field. Use the sections below to build your understanding, identify seminal works, and structure the narrative of your paper from foundational concepts to future outlooks.</p>
+        </section>
+
+        <section id="history" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-10">Historical Context & Evolution</h2>
+            <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">A strong review article is grounded in historical context. This section provides an interactive timeline of the pivotal moments that paved the way for modern digital and AI-powered pathology. Click on each event to reveal key research points to explore for your article's introduction.</p>
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="md:w-1/2 relative border-l-2 border-gray-200 ml-5 md:ml-0 pl-8 pb-8">
+                    <div id="timeline-container">
+                        <!-- Timeline items will be injected by JS -->
+                    </div>
+                </div>
+                <div class="md:w-1/2 md:pl-12">
+                    <div id="timeline-details" class="bg-white p-6 rounded-lg shadow-md sticky top-24">
+                        <h3 id="details-title" class="text-xl font-bold mb-2 text-[#8C6A5D]">Select an Event</h3>
+                        <p id="details-description" class="text-gray-700 mb-4">Click on a milestone from the timeline to see its significance and suggested research topics.</p>
+                        <div id="details-points-container">
+                            <h4 class="font-semibold mb-2">Key Research Points:</h4>
+                            <ul id="details-points" class="list-disc list-inside text-gray-600 space-y-1">
+                                <li>Explore the initial motivations for this development.</li>
+                                <li>Identify key inventors, researchers, or institutions.</li>
+                                <li>Analyze its impact on subsequent innovations.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="technology" class="mb-16 md:mb-24 scroll-mt-20 bg-white p-8 md:p-12 rounded-xl shadow-sm">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-10">Core Digital Pathology Technologies</h2>
+             <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">Your review must explain the foundational technologies that enable digital pathology. This section breaks down the key components of the digital workflow. For your article, detail the function of each component, discuss the technical specifications, and review the evolution of its capabilities.</p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center p-6 border border-gray-200 rounded-lg">
+                    <div class="text-4xl mb-4 text-[#8C6A5D]">🔬</div>
+                    <h3 class="text-xl font-semibold mb-2">Whole Slide Imaging (WSI) Scanners</h3>
+                    <p class="text-gray-600">Devices that digitize entire glass slides at high resolution, creating massive image files. Research focus: Compare different scanning technologies (e.g., line-scan vs. area-scan), resolution standards, and impact of scanning artifacts on AI.</p>
+                </div>
+                <div class="text-center p-6 border border-gray-200 rounded-lg">
+                    <div class="text-4xl mb-4 text-[#8C6A5D]">🖥️</div>
+                    <h3 class="text-xl font-semibold mb-2">Image Management Systems (IMS)</h3>
+                    <p class="text-gray-600">Software for storing, viewing, and managing digital slides (e.g., PACS, VNA). Research focus: Discuss interoperability standards (like DICOM), workflow integration challenges, and features of modern pathology viewers.</p>
+                </div>
+                <div class="text-center p-6 border border-gray-200 rounded-lg">
+                    <div class="text-4xl mb-4 text-[#8C6A5D]">💾</div>
+                    <h3 class="text-xl font-semibold mb-2">Data Storage & Infrastructure</h3>
+                    <p class="text-gray-600">The backend systems required to handle petabyte-scale image data. Research focus: Analyze the trade-offs between on-premise vs. cloud storage, data compression techniques, and the computational requirements for AI model training.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="ai-integration" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-10">The AI-Integrated Workflow</h2>
+            <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">A critical part of your review is explaining how AI integrates into the digital pathology workflow to create "computational pathology." The process below illustrates a typical pipeline from slide digitization to clinical insight. Use this as a framework to discuss the various algorithms and techniques applied at each stage.</p>
+            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+                <div class="p-4 bg-white rounded-lg shadow-md text-center"><strong>1. Digitization</strong><br><span class="text-sm text-gray-500">(WSI Scanner)</span></div>
+                <div class="text-2xl text-gray-400 font-mono">&rarr;</div>
+                <div class="p-4 bg-white rounded-lg shadow-md text-center"><strong>2. Pre-processing</strong><br><span class="text-sm text-gray-500">(Stain Normalization)</span></div>
+                <div class="text-2xl text-gray-400 font-mono">&rarr;</div>
+                <div class="p-4 bg-teal-50 border-2 border-teal-200 rounded-lg shadow-md text-center"><strong>3. AI Analysis</strong><br><span class="text-sm text-teal-700">(CNN Model)</span></div>
+                <div class="text-2xl text-gray-400 font-mono">&rarr;</div>
+                <div class="p-4 bg-white rounded-lg shadow-md text-center"><strong>4. Post-processing</strong><br><span class="text-sm text-gray-500">(Heatmap Generation)</span></div>
+                <div class="text-2xl text-gray-400 font-mono">&rarr;</div>
+                <div class="p-4 bg-white rounded-lg shadow-md text-center"><strong>5. Clinical Insight</strong><br><span class="text-sm text-gray-500">(Diagnosis/Prognosis)</span></div>
+            </div>
+        </section>
+        
+        <section id="applications" class="mb-16 md:mb-24 scroll-mt-20">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-10">Key Research Applications & Trends</h2>
+            <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">The core of your review will cover the specific applications of AI in pathology. This section provides an interactive explorer to discover key research areas. Use the filters to narrow down topics and observe publication trends in the chart, which can help you identify mature vs. emerging areas of research to highlight in your paper.</p>
+            <div class="flex flex-col md:flex-row gap-8">
+                <div class="md:w-1/3">
+                    <div class="bg-white p-6 rounded-lg shadow-md sticky top-24">
+                        <h3 class="font-semibold mb-4">Filter Applications</h3>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">By Disease</label>
+                            <select id="disease-filter" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#8C6A5D] focus:border-[#8C6A5D]">
+                                <!-- Options populated by JS -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">By Task</label>
+                            <select id="task-filter" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#8C6A5D] focus:border-[#8C6A5D]">
+                                <!-- Options populated by JS -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-2/3">
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold mb-4 text-center">Mock Publication Trends (2020-2024)</h3>
+                        <div class="chart-container bg-white p-4 rounded-lg shadow-inner">
+                            <canvas id="applicationsChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Key Research Questions to Address: 
+                            <button id="tts-read-btn" class="ml-3 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-semibold py-1 px-3 rounded-full transition duration-150 shadow-sm disabled:opacity-50" title="Read the current questions aloud">
+                                🔊 TTS Read
+                            </button>
+                        </h3>
+                        <div id="applications-list" class="space-y-4">
+                           <!-- Content populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="abstract-generator" class="mb-16 md:mb-24 scroll-mt-20 bg-teal-50 p-8 md:p-12 rounded-xl shadow-lg border border-teal-200">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-10 text-teal-800">Review Article Drafting Assistant ✨</h2>
+            <p class="text-center max-w-3xl mx-auto text-teal-700 mb-8">Use the power of Generative AI to draft a review article abstract based on your current application filters (Disease & Task). The AI will synthesize current research trends and identify relevant sources to suggest a scope and conclusion.</p>
+            
+            <div class="max-w-4xl mx-auto">
+                <button id="generate-abstract-btn" class="w-full bg-[#8C6A5D] hover:bg-[#A98C81] text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-md flex items-center justify-center">
+                    <span class="mr-2">✨</span> Generate Abstract Draft for Current Topic
+                </button>
+                
+                <div id="abstract-loading" class="hidden mt-6 text-center text-teal-600 font-semibold">
+                    <div class="animate-spin inline-block w-6 h-6 border-4 border-current border-t-transparent rounded-full mr-2"></div>
+                    Drafting the abstract... (This uses Google Search grounding for real-time data.)
+                </div>
+                
+                <div id="abstract-output" class="mt-6 p-6 bg-white border border-teal-300 rounded-lg shadow-inner min-h-[150px]">
+                    <h4 class="text-xl font-semibold mb-2 text-[#4A4A4A]">Generated Abstract:</h4>
+                    <p id="abstract-text" class="text-gray-700 italic">The generated abstract will appear here...</p>
+                    <div id="abstract-sources" class="mt-4 text-sm text-gray-500 hidden">
+                        <h5 class="font-semibold">Sources Used:</h5>
+                        <ul id="sources-list" class="list-disc list-inside ml-4 mt-1 space-y-1"></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="challenges" class="scroll-mt-20">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-10">Challenges & Future Directions</h2>
+             <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">A forward-looking review must critically evaluate current limitations and speculate on future trends. This section outlines the major hurdles and promising avenues in the field. Your paper should dedicate a significant portion to discussing these points, citing recent literature that proposes solutions or new directions.</p>
+            <div class="space-y-4 max-w-4xl mx-auto">
+                <details class="group bg-white p-4 rounded-lg shadow-sm cursor-pointer">
+                    <summary class="flex justify-between items-center font-semibold text-gray-800">
+                        Technical & Data Hurdles
+                        <span class="transform transition-transform duration-300 group-open:rotate-180">&#9660;</span>
+                    </summary>
+                    <p class="mt-2 text-gray-600">Discuss issues like lack of standardized data formats, variability from stain and scanner differences (domain shift), and the immense computational cost of training models on gigapixel images.</p>
+                </details>
+                <details class="group bg-white p-4 rounded-lg shadow-sm cursor-pointer">
+                    <summary class="flex justify-between items-center font-semibold text-gray-800">
+                        Regulatory & Clinical Adoption
+                        <span class="transform transition-transform duration-300 group-open:rotate-180">&#9660;</span>
+                    </summary>
+                    <p class="mt-2 text-gray-600">Review the process for regulatory approval (e.g., FDA, CE marking) for AI algorithms as medical devices. Analyze pathologist trust, workflow integration, and the need for large-scale clinical validation studies.</p>
+                </details>
+                <details class="group bg-white p-4 rounded-lg shadow-sm cursor-pointer">
+                    <summary class="flex justify-between items-center font-semibold text-gray-800">
+                        Ethical Considerations
+                        <span class="transform transition-transform duration-300 group-open:rotate-180">&#9660;</span>
+                    </summary>
+                    <p class="mt-2 text-gray-600">Explore concerns related to data privacy (patient anonymity), potential for algorithmic bias (e.g., performance differences across populations), and the "black box" nature of some deep learning models.</p>
+                </details>
+                <details class="group bg-white p-4 rounded-lg shadow-sm cursor-pointer">
+                    <summary class="flex justify-between items-center font-semibold text-gray-800">
+                        Future Outlook: Multimodal AI & Explainability
+                        <span class="transform transition-transform duration-300 group-open:rotate-180">&#9660;</span>
+                    </summary>
+                    <p class="mt-2 text-gray-600">Discuss emerging research in combining WSI data with genomics, proteomics, and clinical data (multimodal AI). Explore the push for explainable AI (XAI) to make model predictions more interpretable for pathologists.</p>
+                </details>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white mt-16 md:mt-24">
+        <div class="container mx-auto py-4 px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm">
+            <p>Interactive Research Roadmap | Generated to assist in academic writing.</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL_BASE = 'https://generativelanguage.googleapis.com/v1beta/models/';
+        const apiKey = ""; 
+
+        async function fetchWithExponentialBackoff(url, options, maxRetries = 5) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.status !== 429) {
+                        return response;
+                    }
+                } catch (error) {
+                    if (i === maxRetries - 1) throw error;
+                }
+                await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+            }
+            throw new Error('API request failed after multiple retries.');
+        }
+
+        function base64ToArrayBuffer(base64) {
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        function pcmToWav(pcmData, sampleRate) {
+            const buffer = new ArrayBuffer(44 + pcmData.length * 2);
+            const view = new DataView(buffer);
+            let offset = 0;
+
+            function writeString(str) {
+                for (let i = 0; i < str.length; i++) {
+                    view.setUint8(offset + i, str.charCodeAt(i));
+                }
+                offset += str.length;
+            }
+
+            function writeUint32(val) {
+                view.setUint32(offset, val, true);
+                offset += 4;
+            }
+
+            function writeUint16(val) {
+                view.setUint16(offset, val, true);
+                offset += 2;
+            }
+
+            writeString('RIFF');
+            writeUint32(36 + pcmData.length * 2);
+            writeString('WAVE');
+
+            writeString('fmt ');
+            writeUint32(16);
+            writeUint16(1);
+            writeUint16(1);
+            writeUint32(sampleRate);
+            writeUint32(sampleRate * 2);
+            writeUint16(2);
+            writeUint16(16);
+
+            writeString('data');
+            writeUint32(pcmData.length * 2);
+
+            for (let i = 0; i < pcmData.length; i++) {
+                view.setInt16(offset, pcmData[i], true);
+                offset += 2;
+            }
+
+            return new Blob([view], { type: 'audio/wav' });
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const timelineData = [
+                { year: 'c. 1890s', title: 'Early Photomicrography', description: 'The first attempts to capture microscope images on photographic plates, laying the groundwork for imaging in pathology.', points: ['Who were the pioneers of photomicrography?', 'What were the technical limitations of this era?', 'How did this change pathology reporting?'] },
+                { year: '1986', title: 'First Telerobotic Microscopy', description: 'Development of systems allowing pathologists to remotely control a microscope, a precursor to telepathology.', points: ['Analyze the motivations behind remote microscopy (e.g., expert consultation).', 'Discuss the technologies involved (robotics, video transmission).', 'Evaluate the impact on collaborative diagnostics.'] },
+                { year: 'c. 1999', title: 'Virtual Microscopy Emerges', description: 'The concept of scanning an entire slide to create a "virtual slide" that can be viewed on a computer screen begins to take shape.', points: ['Compare early virtual microscopy systems to modern WSI.', 'What were the storage and computational challenges?', 'Who were the key academic and commercial players?'] },
+                { year: 'c. 2000s', title: 'Commercial WSI Scanners', description: 'The availability of the first commercial whole slide imaging scanners marks the true beginning of the digital pathology era.', points: ['Review the first generation of commercial scanners.', 'How did their availability change research and clinical practice?', 'Discuss the initial cost and workflow barriers.'] },
+                { year: 'c. 2012', title: 'Deep Learning Revolution', description: 'Breakthroughs in deep learning (e.g., AlexNet) provide powerful new tools for image analysis, which are quickly adapted for medical imaging.', points: ['Explain why deep learning is well-suited for pathology images.', 'Contrast deep learning with traditional machine learning approaches.', 'Cite early seminal papers applying CNNs to pathology.'] },
+                { year: '2017', title: 'First FDA Approval for Primary Diagnosis', description: 'The FDA approves a WSI system for primary diagnostic use in the US, a major regulatory milestone for digital pathology.', points: ['Analyze the significance of this regulatory approval.', 'What evidence was required for the approval?', 'How did this impact the adoption of digital pathology in clinical settings?'] }
+            ];
+
+            const timelineContainer = document.getElementById('timeline-container');
+            const detailsTitle = document.getElementById('details-title');
+            const detailsDescription = document.getElementById('details-description');
+            const detailsPoints = document.getElementById('details-points');
+
+            timelineData.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = `timeline-item relative mb-8 pl-4 cursor-pointer`;
+                div.innerHTML = `<p class="font-bold text-sm text-[#8C6A5D]">${item.year}</p><h4 class="font-semibold">${item.title}</h4>`;
+                div.addEventListener('click', () => {
+                    document.querySelectorAll('.timeline-item').forEach(el => el.classList.remove('active'));
+                    div.classList.add('active');
+                    detailsTitle.textContent = item.title;
+                    detailsDescription.textContent = item.description;
+                    detailsPoints.innerHTML = item.points.map(p => `<li>${p}</li>`).join('');
+                });
+                timelineContainer.appendChild(div);
+            });
+
+            const firstTimelineItem = timelineContainer.querySelector('.timeline-item');
+            if (firstTimelineItem) {
+                firstTimelineItem.click();
+            }
+
+            const applicationsData = [
+                { id: 1, disease: 'Breast Cancer', task: 'Diagnosis', title: 'Mitotic Figure Counting', research: 'Review algorithms for automated detection and counting of mitotic figures in H&E stained slides for grading breast cancer. Compare performance with manual pathologist counts and discuss challenges like mimicry.', publications: { '2020': 120, '2021': 150, '2022': 180, '2023': 220, '2024': 250 } },
+                { id: 2, disease: 'Prostate Cancer', task: 'Diagnosis', title: 'Gleason Grading', research: 'Analyze deep learning models for automated Gleason grading of prostate biopsies. Discuss the challenge of grading borderline patterns (e.g., Gleason 3+4 vs 4+3) and the impact on clinical decisions.', publications: { '2020': 110, '2021': 140, '2022': 190, '2023': 230, '2024': 260 } },
+                { id: 3, disease: 'Lung Cancer', task: 'Prognosis', title: 'Predicting Survival', research: 'Explore AI models that use features from tumor morphology in WSIs to predict patient survival outcomes, often outperforming traditional staging. Discuss the concept of "morphological biomarkers".', publications: { '2020': 80, '2021': 110, '2022': 150, '2023': 190, '2024': 230 } },
+                { id: 4, disease: 'Colon Cancer', task: 'Prognosis', title: 'Tumor-Infiltrating Lymphocytes (TILs)', research: 'Review methods for quantifying TILs in the tumor microenvironment from WSIs. Discuss the prognostic significance of TIL density and spatial distribution in colorectal cancer.', publications: { '2020': 70, '2021': 90, '2022': 130, '2023': 160, '2024': 200 } },
+                { id: 5, disease: 'Breast Cancer', task: 'Prognosis', title: 'Genomic Prediction from Histology', research: 'Discuss the "image-to-omics" approach where AI models predict genomic alterations (e.g., ER/PR status, HER2 amplification) directly from H&E images, potentially reducing the need for costly molecular tests.', publications: { '2020': 90, '2021': 130, '2022': 170, '2023': 210, '2024': 250 } },
+                { id: 6, disease: 'General', task: 'Diagnosis', title: 'Tumor Detection & Segmentation', research: 'Cover the fundamental task of training models to identify and outline tumor regions in a WSI. This is often a preliminary step for more advanced analysis. Discuss different model architectures (e.g., U-Net).', publications: { '2020': 200, '2021': 250, '2022': 300, '2023': 350, '2024': 400 } }
+            ];
+
+            const diseaseFilter = document.getElementById('disease-filter');
+            const taskFilter = document.getElementById('task-filter');
+            const applicationsList = document.getElementById('applications-list');
+            
+            const diseases = ['All', ...new Set(applicationsData.map(a => a.disease))];
+            const tasks = ['All', ...new Set(applicationsData.map(a => a.task))];
+
+            diseases.forEach(d => {
+                const option = document.createElement('option');
+                option.value = d;
+                option.textContent = d;
+                diseaseFilter.appendChild(option);
+            });
+
+            tasks.forEach(t => {
+                const option = document.createElement('option');
+                option.value = t;
+                option.textContent = t;
+                taskFilter.appendChild(option);
+            });
+
+            let applicationsChart;
+            const ctx = document.getElementById('applicationsChart').getContext('2d');
+
+            function renderApplications(filteredData) {
+                applicationsList.innerHTML = '';
+                if(filteredData.length === 0) {
+                    applicationsList.innerHTML = '<p class="text-gray-500">No matching applications found.</p>';
+                    return;
+                }
+                filteredData.forEach(app => {
+                    const div = document.createElement('div');
+                    div.className = 'bg-white p-4 rounded-lg border border-gray-200';
+                    div.innerHTML = `<h4 class="font-semibold text-[#4A4A4A]">${app.title} (${app.disease} - ${app.task})</h4><p class="text-gray-600">${app.research}</p>`;
+                    applicationsList.appendChild(div);
+                });
+            }
+            
+            function renderChart(filteredData) {
+                const aggregatedData = filteredData.reduce((acc, curr) => {
+                    Object.entries(curr.publications).forEach(([year, count]) => {
+                        acc[year] = (acc[year] || 0) + count;
+                    });
+                    return acc;
+                }, {});
+
+                const labels = Object.keys(aggregatedData).sort();
+                const data = labels.map(label => aggregatedData[label]);
+
+                if (applicationsChart) {
+                    applicationsChart.destroy();
+                }
+                applicationsChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Number of Publications (Mock Data)',
+                            data: data,
+                            backgroundColor: 'rgba(140, 106, 93, 0.6)',
+                            borderColor: 'rgba(140, 106, 93, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: { display: true, text: 'Publications' }
+                            },
+                            x: {
+                                title: { display: true, text: 'Year' }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return ` Publications: ${context.parsed.y}`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function filterAndRender() {
+                const selectedDisease = diseaseFilter.value;
+                const selectedTask = taskFilter.value;
+
+                let filtered = applicationsData;
+
+                if (selectedDisease !== 'All') {
+                    filtered = filtered.filter(a => a.disease === selectedDisease);
+                }
+                if (selectedTask !== 'All') {
+                    filtered = filtered.filter(a => a.task === selectedTask);
+                }
+                
+                renderApplications(filtered);
+                renderChart(filtered);
+            }
+
+            diseaseFilter.addEventListener('change', filterAndRender);
+            taskFilter.addEventListener('change', filterAndRender);
+            
+            filterAndRender();
+
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 80) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+
+            // --- GEMINI API INTEGRATIONS ---
+
+            const generateAbstractBtn = document.getElementById('generate-abstract-btn');
+            const abstractLoading = document.getElementById('abstract-loading');
+            const abstractText = document.getElementById('abstract-text');
+            const abstractSources = document.getElementById('abstract-sources');
+            const sourcesList = document.getElementById('sources-list');
+
+            async function generateAbstract() {
+                const selectedDisease = diseaseFilter.value;
+                const selectedTask = taskFilter.value;
+
+                abstractText.textContent = 'Awaiting draft...';
+                abstractSources.classList.add('hidden');
+                sourcesList.innerHTML = '';
+                abstractLoading.classList.remove('hidden');
+                generateAbstractBtn.disabled = true;
+
+                const query = `Write a comprehensive, 250-word academic abstract for a review article on Digital Pathology and AI integration. Focus the scope on the application of AI for ${selectedTask} in ${selectedDisease === 'All' ? 'various cancer types' : selectedDisease}. The abstract must include: 1) Background on digital pathology adoption, 2) Scope of the review (key applications and models), 3) Key findings/insights on current performance/trends, and 4) A conclusion on future directions (challenges/multimodal AI).`;
+
+                const systemPrompt = "Act as an expert academic researcher and abstract writer for a high-impact medical journal. Ensure the tone is objective, formal, and scientifically precise. The abstract must be self-contained and highly structured.";
+                
+                const apiUrl = `${API_URL_BASE}gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                
+                const payload = {
+                    contents: [{ parts: [{ text: query }] }],
+                    tools: [{ "google_search": {} }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] },
+                };
+
+                const options = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                };
+
+                try {
+                    const response = await fetchWithExponentialBackoff(apiUrl, options);
+                    const result = await response.json();
+                    const candidate = result.candidates?.[0];
+
+                    if (candidate && candidate.content?.parts?.[0]?.text) {
+                        const text = candidate.content.parts[0].text;
+                        abstractText.textContent = text;
+
+                        let sources = [];
+                        const groundingMetadata = candidate.groundingMetadata;
+                        if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                            sources = groundingMetadata.groundingAttributions
+                                .map(attribution => ({ uri: attribution.web?.uri, title: attribution.web?.title }))
+                                .filter(source => source.uri && source.title);
+                        }
+                        
+                        if (sources.length > 0) {
+                            sourcesList.innerHTML = sources.map(s => `<li><a href="${s.uri}" target="_blank" class="text-[#8C6A5D] hover:underline">${s.title}</a></li>`).join('');
+                            abstractSources.classList.remove('hidden');
+                        }
+                    } else {
+                        abstractText.textContent = 'Error: Could not generate abstract. Please try a different query or check the API connection.';
+                    }
+
+                } catch (error) {
+                    console.error('API Error:', error);
+                    abstractText.textContent = 'Error: Failed to connect to the drafting service.';
+                } finally {
+                    abstractLoading.classList.add('hidden');
+                    generateAbstractBtn.disabled = false;
+                }
+            }
+
+            generateAbstractBtn.addEventListener('click', generateAbstract);
+
+            // --- TTS Implementation ---
+
+            const ttsReadBtn = document.getElementById('tts-read-btn');
+            
+            async function speakResearchQuestions() {
+                const listItems = applicationsList.querySelectorAll('p');
+                if (listItems.length === 0) return;
+                
+                ttsReadBtn.disabled = true;
+                const originalText = ttsReadBtn.textContent;
+                ttsReadBtn.textContent = '... Speaking ...';
+
+                const questions = Array.from(listItems).map(p => p.textContent).join('\n\n');
+                const ttsPrompt = `Read the following key research questions for a review article in an informative and clear tone:\n\n${questions}`;
+
+                const apiUrl = `${API_URL_BASE}gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+                const payload = {
+                    contents: [{ parts: [{ text: ttsPrompt }] }],
+                    generationConfig: {
+                        responseModalities: ["AUDIO"],
+                        speechConfig: {
+                            voiceConfig: { prebuiltVoiceConfig: { voiceName: "Rasalgethi" } }
+                        }
+                    },
+                    model: "gemini-2.5-flash-preview-tts"
+                };
+
+                const options = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                };
+
+                try {
+                    const response = await fetchWithExponentialBackoff(apiUrl, options);
+                    const result = await response.json();
+                    const part = result?.candidates?.[0]?.content?.parts?.[0];
+                    const audioData = part?.inlineData?.data;
+                    const mimeType = part?.inlineData?.mimeType;
+
+                    if (audioData && mimeType && mimeType.startsWith("audio/")) {
+                        const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+                        const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 16000;
+                        const pcmData = base64ToArrayBuffer(audioData);
+                        const pcm16 = new Int16Array(pcmData);
+                        const wavBlob = pcmToWav(pcm16, sampleRate);
+                        const audioUrl = URL.createObjectURL(wavBlob);
+                        
+                        const audio = new Audio(audioUrl);
+                        audio.play();
+                        audio.onended = () => {
+                            ttsReadBtn.textContent = originalText;
+                            ttsReadBtn.disabled = false;
+                            URL.revokeObjectURL(audioUrl);
+                        };
+                    } else {
+                        console.error('TTS Audio data missing or invalid:', result);
+                        ttsReadBtn.textContent = 'TTS Failed';
+                    }
+                } catch (error) {
+                    console.error('TTS API Error:', error);
+                    ttsReadBtn.textContent = 'TTS Failed';
+                } finally {
+                    if (ttsReadBtn.textContent === 'TTS Failed') {
+                        setTimeout(() => {
+                            ttsReadBtn.textContent = originalText;
+                            ttsReadBtn.disabled = false;
+                        }, 2000);
+                    }
+                }
+            }
+
+            ttsReadBtn.addEventListener('click', speakResearchQuestions);
+        });
+    </script>
 </body>
 </html>
