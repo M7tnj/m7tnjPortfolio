@@ -3,672 +3,661 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Research Roadmap: Digital & AI Pathology Review Article</title>
+    <title>Truth Detection: ML, Neuroscience & Linguistics</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Warm Harmony -->
-    <!-- Application Structure Plan: The SPA is structured as a linear, scrollable research guide that mirrors the logical flow of a review article. It starts with a high-level introduction, moves to historical context, delves into core technologies and AI integration, explores specific applications, and concludes with challenges and future directions. This top-down structure helps the user build foundational knowledge before tackling complex applications. A sticky navigation bar allows non-linear access to sections, catering to users who want to jump to specific areas. Key interactions include clickable timeline events, filterable application examples, and dynamic chart updates, all designed to make the dense research topic digestible and to help the user identify key areas for their own article. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Academic Neutral -->
+    <!-- Application Structure Plan: The application is a single-page, vertically-scrolling interactive report. This structure was chosen over a dashboard because the content is explanatory and best consumed in a logical, chapter-like flow. A sticky sidebar navigation (desktop) and a mobile menu provide a persistent table of contents, allowing the user (an academic) to either read linearly or jump to specific sections of interest. Key interactions include: 1) Clickable timeline items to reveal historical context. 2) Clickable cards to explore linguistic features. 3) Hover-to-reveal hotspots on a CSS-based brain diagram. 4) A live Chart.js chart demonstrating the P300 concept. 5) JS-powered filters for ML projects. 6) A tabbed interface to detail each proposed computational model, complete with CSS-based architecture diagrams. This structure is designed for exploration and deep understanding, directly addressing the user's research request. -->
     <!-- Visualization & Content Choices: 
-        - Historical Timeline: Report Info -> Key historical events. Goal -> Show progression. Viz -> Interactive vertical timeline using styled HTML/JS. Interaction -> Click event on items to reveal details. Justification -> Visually intuitive way to understand history. Method -> HTML/CSS/JS.
-        - AI Workflow Diagram: Report Info -> Steps in an AI pathology pipeline. Goal -> Explain a process. Viz -> Flowchart diagram. Interaction -> Hover/click to highlight stages and see explanations. Justification -> Simplifies a complex technical process. Method -> HTML/Tailwind Flexbox.
-        - Research Applications: Report Info -> Various uses of AI in pathology. Goal -> Organize and compare applications. Viz -> Filterable grid of cards and a dynamic bar chart. Interaction -> Filtering by 'Disease' and 'Task'. Chart and text update dynamically. Justification -> Allows user to explore the breadth of research and see publication trends, directly informing their review's scope. Library -> Chart.js for the chart, Vanilla JS for filtering logic.
-        - Challenges: Report Info -> Obstacles in the field. Goal -> Inform about current issues. Viz -> Interactive accordion/list. Interaction -> Click to expand sections. Justification -> Cleanly organizes distinct topics. Method -> HTML/JS.
+        1.  Report Info (History): Goal: Show progression. Viz/Method: HTML/CSS list with JS click-to-reveal. Interaction: Click. Justification: Simple, text-heavy, avoids complex charts for sparse data. Library: Vanilla JS.
+        2.  Report Info (Linguistic Cues): Goal: Categorize features. Viz/Method: HTML/CSS grid of cards. Interaction: Click-to-reveal details. Justification: Organizes distinct feature categories intuitively. Library: Vanilla JS.
+        3.  Report Info (fMRI Brain Regions): Goal: Show key spatial areas. Viz/Method: CSS-based diagram (divs). Interaction: Hover-to-reveal info. Justification: Visualizes location (PFC, Insula) *without* using SVG. Library: Vanilla JS/CSS.
+        4.  Report Info (EEG P300 Concept): Goal: Explain CIT vs. Innocent. Viz/Method: Chart.js Bar Chart (Canvas). Interaction: Tooltip. Justification: The bar chart is the clearest way to show the *signal difference* (the P300 spike) which is the core concept. Library: Chart.js.
+        5.  Report Info (ML Projects): Goal: Organize examples. Viz/Method: Filterable HTML cards. Interaction: Button click (filter). Justification: Allows user to sort projects by modality (e.g., neuro, multi-modal). Library: Vanilla JS.
+        6.  Report Info (Proposed Models): Goal: Detail computational approaches. Viz/Method: Tabbed interface with HTML/CSS flow diagrams. Interaction: Click tabs. Justification: Cleanly separates the 5 complex proposals; CSS diagrams show model flow without SVG/Mermaid. Library: Vanilla JS.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #FDFBF8;
-            color: #4A4A4A;
-        }
-        .nav-link {
-            transition: all 0.3s ease;
-            border-bottom: 2px solid transparent;
-        }
-        .nav-link:hover, .nav-link.active {
-            color: #8C6A5D;
-            border-bottom-color: #8C6A5D;
-        }
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -21px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background-color: #D3C5BC;
-            border: 2px solid #FDFBF8;
-        }
-        .timeline-item.active::before {
-            background-color: #8C6A5D;
+            background-color: #fdfdfc;
+            color: #333745;
         }
         .chart-container {
             position: relative;
             width: 100%;
-            max-width: 800px;
+            max-width: 600px;
             margin-left: auto;
             margin-right: auto;
-            height: 400px;
-            max-height: 50vh;
+            height: 300px;
+            max-height: 400px;
         }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 450px;
-            }
+        .sticky-nav a {
+            transition: all 0.2s ease-in-out;
+            border-left: 3px solid transparent;
+        }
+        .sticky-nav a.active, .sticky-nav a:hover {
+            color: #0d9488;
+            border-left-color: #0d9488;
+            transform: translateX(4px);
+        }
+        .tab-btn {
+            transition: all 0.2s ease-in-out;
+        }
+        .tab-btn.active {
+            background-color: #0d9488;
+            color: #ffffff;
+        }
+        .model-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: #f3f4f6;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+        }
+        .model-diagram-row {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            width: 100%;
+        }
+        .model-block {
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            text-align: center;
+            font-weight: 600;
+            color: #374151;
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+        .model-arrow {
+            font-size: 1.5rem;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .brain-diagram {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            margin: 2rem auto;
+            background-color: #e0e7ff;
+            border: 2px solid #a5b4fc;
+            border-radius: 45% 55% 60% 40% / 50% 45% 55% 50%;
+            transform: rotate(-15deg);
+        }
+        .brain-hotspot {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: #ef4444;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.2s ease-in-out;
+        }
+        .brain-hotspot:hover {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+        .hotspot-pfc { top: 20%; left: 60%; }
+        .hotspot-insula { top: 45%; left: 45%; }
+        .hotspot-info {
+            display: none;
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333745;
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            width: 200px;
+            z-index: 10;
+        }
+        .brain-hotspot:hover .hotspot-info {
+            display: block;
+        }
+        [data-section] {
+            padding-top: 6rem;
+            margin-top: -4rem;
         }
     </style>
 </head>
-<body class="antialiased">
+<body class="bg-stone-50 text-slate-800">
 
-    <header id="header" class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
-        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex-shrink-0">
-                    <span class="text-lg font-bold text-[#8C6A5D]">Research Roadmap</span>
-                </div>
-                <div class="hidden md:block">
-                    <div id="nav-links" class="ml-10 flex items-baseline space-x-4">
-                        <a href="#introduction" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Introduction</a>
-                        <a href="#history" class="nav-link px-3 py-2 rounded-md text-sm font-medium">History</a>
-                        <a href="#technology" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Technology</a>
-                        <a href="#ai-integration" class="nav-link px-3 py-2 rounded-md text-sm font-medium">AI Integration</a>
-                        <a href="#applications" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Applications</a>
-                        <a href="#abstract-generator" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Drafting Assistant</a>
-                        <a href="#challenges" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Challenges</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </header>
+    <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row">
 
-    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        
-        <section id="introduction" class="text-center mb-16 md:mb-24 scroll-mt-20">
-            <h1 class="text-3xl md:text-5xl font-bold text-[#4A4A4A] tracking-tight">Advances and History of Digital Pathology and AI Integration</h1>
-            <p class="mt-4 md:mt-6 max-w-3xl mx-auto text-lg text-gray-600">A structured guide to researching and writing a comprehensive review article on the intersection of pathology, digital imaging, and artificial intelligence in diagnosis and prognosis.</p>
-             <p class="mt-4 max-w-3xl mx-auto text-base text-gray-500">This interactive roadmap is designed to help you navigate the key domains of this rapidly evolving field. Use the sections below to build your understanding, identify seminal works, and structure the narrative of your paper from foundational concepts to future outlooks.</p>
-        </section>
+            <button id="mobile-menu-btn" class="md:hidden fixed top-4 right-4 z-50 bg-white p-2 rounded-md shadow-lg">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
 
-        <section id="history" class="mb-16 md:mb-24 scroll-mt-20">
-            <h2 class="text-2xl md:text-3xl font-bold text-center mb-10">Historical Context & Evolution</h2>
-            <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">A strong review article is grounded in historical context. This section provides an interactive timeline of the pivotal moments that paved the way for modern digital and AI-powered pathology. Click on each event to reveal key research points to explore for your article's introduction.</p>
-            <div class="flex flex-col md:flex-row justify-between">
-                <div class="md:w-1/2 relative border-l-2 border-gray-200 ml-5 md:ml-0 pl-8 pb-8">
-                    <div id="timeline-container">
-                        <!-- Timeline items will be injected by JS -->
-                    </div>
+            <nav id="sidebar-nav" class="sticky-nav fixed md:sticky top-0 h-screen w-64 bg-stone-100 p-8 transform -translate-x-full md:translate-x-0 transition-transform z-40 md:z-10 md:top-0 md:h-screen md:w-1/4 lg:w-1/5 md:flex md:flex-col md:justify-center">
+                <h3 class="text-xl font-bold text-teal-700 mb-6">Report Contents</h3>
+                <div class="flex flex-col space-y-3">
+                    <a href="#introduction" class="font-semibold text-slate-600 px-3 py-1">Introduction</a>
+                    <a href="#history" class="font-semibold text-slate-600 px-3 py-1">Historical View</a>
+                    <a href="#linguistic" class="font-semibold text-slate-600 px-3 py-1">Linguistic Cues</a>
+                    <a href="#neuro" class="font-semibold text-slate-600 px-3 py-1">Neuro-Cognitive Signatures</a>
+                    <a href="#ml_projects" class="font-semibold text-slate-600 px-3 py-1">Multi-modal ML Projects</a>
+                    <a href="#proposals" class="font-semibold text-slate-600 px-3 py-1">Proposed Approaches</a>
                 </div>
-                <div class="md:w-1/2 md:pl-12">
-                    <div id="timeline-details" class="bg-white p-6 rounded-lg shadow-md sticky top-24">
-                        <h3 id="details-title" class="text-xl font-bold mb-2 text-[#8C6A5D]">Select an Event</h3>
-                        <p id="details-description" class="text-gray-700 mb-4">Click on a milestone from the timeline to see its significance and suggested research topics.</p>
-                        <div id="details-points-container">
-                            <h4 class="font-semibold mb-2">Key Research Points:</h4>
-                            <ul id="details-points" class="list-disc list-inside text-gray-600 space-y-1">
-                                <li>Explore the initial motivations for this development.</li>
-                                <li>Identify key inventors, researchers, or institutions.</li>
-                                <li>Analyze its impact on subsequent innovations.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+            </nav>
 
-        <section id="technology" class="mb-16 md:mb-24 scroll-mt-20 bg-white p-8 md:p-12 rounded-xl shadow-sm">
-            <h2 class="text-2xl md:text-3xl font-bold text-center mb-10">Core Digital Pathology Technologies</h2>
-             <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">Your review must explain the foundational technologies that enable digital pathology. This section breaks down the key components of the digital workflow. For your article, detail the function of each component, discuss the technical specifications, and review the evolution of its capabilities.</p>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="text-center p-6 border border-gray-200 rounded-lg">
-                    <div class="text-4xl mb-4 text-[#8C6A5D]">🔬</div>
-                    <h3 class="text-xl font-semibold mb-2">Whole Slide Imaging (WSI) Scanners</h3>
-                    <p class="text-gray-600">Devices that digitize entire glass slides at high resolution, creating massive image files. Research focus: Compare different scanning technologies (e.g., line-scan vs. area-scan), resolution standards, and impact of scanning artifacts on AI.</p>
-                </div>
-                <div class="text-center p-6 border border-gray-200 rounded-lg">
-                    <div class="text-4xl mb-4 text-[#8C6A5D]">🖥️</div>
-                    <h3 class="text-xl font-semibold mb-2">Image Management Systems (IMS)</h3>
-                    <p class="text-gray-600">Software for storing, viewing, and managing digital slides (e.g., PACS, VNA). Research focus: Discuss interoperability standards (like DICOM), workflow integration challenges, and features of modern pathology viewers.</p>
-                </div>
-                <div class="text-center p-6 border border-gray-200 rounded-lg">
-                    <div class="text-4xl mb-4 text-[#8C6A5D]">💾</div>
-                    <h3 class="text-xl font-semibold mb-2">Data Storage & Infrastructure</h3>
-                    <p class="text-gray-600">The backend systems required to handle petabyte-scale image data. Research focus: Analyze the trade-offs between on-premise vs. cloud storage, data compression techniques, and the computational requirements for AI model training.</p>
-                </div>
-            </div>
-        </section>
+            <main class="w-full md:w-3/4 lg:w-4/5 p-6 md:p-12">
 
-        <section id="ai-integration" class="mb-16 md:mb-24 scroll-mt-20">
-            <h2 class="text-2xl md:text-3xl font-bold text-center mb-10">The AI-Integrated Workflow</h2>
-            <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">A critical part of your review is explaining how AI integrates into the digital pathology workflow to create "computational pathology." The process below illustrates a typical pipeline from slide digitization to clinical insight. Use this as a framework to discuss the various algorithms and techniques applied at each stage.</p>
-            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
-                <div class="p-4 bg-white rounded-lg shadow-md text-center"><strong>1. Digitization</strong><br><span class="text-sm text-gray-500">(WSI Scanner)</span></div>
-                <div class="text-2xl text-gray-400 font-mono">&rarr;</div>
-                <div class="p-4 bg-white rounded-lg shadow-md text-center"><strong>2. Pre-processing</strong><br><span class="text-sm text-gray-500">(Stain Normalization)</span></div>
-                <div class="text-2xl text-gray-400 font-mono">&rarr;</div>
-                <div class="p-4 bg-teal-50 border-2 border-teal-200 rounded-lg shadow-md text-center"><strong>3. AI Analysis</strong><br><span class="text-sm text-teal-700">(CNN Model)</span></div>
-                <div class="text-2xl text-gray-400 font-mono">&rarr;</div>
-                <div class="p-4 bg-white rounded-lg shadow-md text-center"><strong>4. Post-processing</strong><br><span class="text-sm text-gray-500">(Heatmap Generation)</span></div>
-                <div class="text-2xl text-gray-400 font-mono">&rarr;</div>
-                <div class="p-4 bg-white rounded-lg shadow-md text-center"><strong>5. Clinical Insight</strong><br><span class="text-sm text-gray-500">(Diagnosis/Prognosis)</span></div>
-            </div>
-        </section>
-        
-        <section id="applications" class="mb-16 md:mb-24 scroll-mt-20">
-            <h2 class="text-2xl md:text-3xl font-bold text-center mb-10">Key Research Applications & Trends</h2>
-            <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">The core of your review will cover the specific applications of AI in pathology. This section provides an interactive explorer to discover key research areas. Use the filters to narrow down topics and observe publication trends in the chart, which can help you identify mature vs. emerging areas of research to highlight in your paper.</p>
-            <div class="flex flex-col md:flex-row gap-8">
-                <div class="md:w-1/3">
-                    <div class="bg-white p-6 rounded-lg shadow-md sticky top-24">
-                        <h3 class="font-semibold mb-4">Filter Applications</h3>
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">By Disease</label>
-                            <select id="disease-filter" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#8C6A5D] focus:border-[#8C6A5D]">
-                                <!-- Options populated by JS -->
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">By Task</label>
-                            <select id="task-filter" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#8C6A5D] focus:border-[#8C6A5D]">
-                                <!-- Options populated by JS -->
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="md:w-2/3">
-                    <div class="mb-8">
-                        <h3 class="text-xl font-semibold mb-4 text-center">Mock Publication Trends (2020-2024)</h3>
-                        <div class="chart-container bg-white p-4 rounded-lg shadow-inner">
-                            <canvas id="applicationsChart"></canvas>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-semibold mb-4">Key Research Questions to Address: 
-                            <button id="tts-read-btn" class="ml-3 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-semibold py-1 px-3 rounded-full transition duration-150 shadow-sm disabled:opacity-50" title="Read the current questions aloud">
-                                🔊 TTS Read
+                <section id="introduction" data-section>
+                    <h1 class="text-4xl md:text-5xl font-bold text-teal-800 mb-4">Truth Detection at the Nexus</h1>
+                    <h2 class="text-2xl font-semibold text-slate-600 mb-6">Fusing ML, Neuroscience, and Linguistics</h2>
+                    <p class="text-lg text-slate-700 leading-relaxed mb-4">
+                        The quest for reliable truth detection has long been a challenge. Traditional methods, like the polygraph, are fundamentally limited as they measure physiological arousal (e.g., heart rate, skin conductance) which is a *correlate* of stress, not deception itself. An innocent person can be stressed, and a practiced liar can remain calm. This report explores the modern frontier of veracity assessment, moving beyond simple arousal to target the *cognitive processes* of deception.
+                    </p>
+                    <p class="text-lg text-slate-700 leading-relaxed">
+                        We are at the convergence of three powerful fields: <strong class="text-teal-700">Machine Learning (ML)</strong>, which can find complex patterns in data; <strong class="text-teal-700">Neuroscience (fMRI/EEG)</strong>, which can observe the brain's activity during the act of lying; and <strong class="text-teal-700">Linguistics</strong>, which analyzes the structure and content of speech. By fusing these domains, we can build models that are more accurate, robust, and insightful than any single-modality approach. This report outlines the history, key findings, and future computational approaches in this interdisciplinary field.
+                    </p>
+                </section>
+
+                <section id="history" data-section>
+                    <h2 class="text-3xl font-bold text-slate-800 mb-6">A Brief History of Deception Detection</h2>
+                    <p class="text-lg text-slate-700 leading-relaxed mb-8">
+                        The journey from crude ordeals to modern machine learning has been a long one. The timeline below highlights the key technological and conceptual shifts. Click each era to learn more.
+                    </p>
+                    <div class="space-y-4" id="timeline-container">
+                        
+                        <div class="bg-white rounded-lg shadow-md border border-slate-200">
+                            <button class="timeline-toggle w-full text-left p-5 font-bold text-xl text-teal-700 flex justify-between items-center">
+                                <span>1900s-1930s: The Polygraph Era</span>
+                                <span class="timeline-icon text-2xl">+</span>
                             </button>
-                        </h3>
-                        <div id="applications-list" class="space-y-4">
-                           <!-- Content populated by JS -->
+                            <div class="timeline-content hidden p-5 pt-0 text-slate-700 leading-relaxed">
+                                Originating as a medical device to track pulse, the polygraph was adapted by figures like Larson and Keeler for law enforcement. It combines measures of blood pressure, breathing, and galvanic skin response (GSR). Its fundamental flaw remains: it measures stress, not lies.
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-md border border-slate-200">
+                            <button class="timeline-toggle w-full text-left p-5 font-bold text-xl text-teal-700 flex justify-between items-center">
+                                <span>1970s-1990s: Linguistic Analysis</span>
+                                <span class="timeline-icon text-2xl">+</span>
+                            </button>
+                            <div class="timeline-content hidden p-5 pt-0 text-slate-700 leading-relaxed">
+                                Researchers began to systematically study the *language* of deception. Early work suggested that liars use different speech patterns, such as fewer "I" statements, more negative emotion words, and less complex sentences. This work laid the foundation for computational linguistics in veracity.
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-md border border-slate-200">
+                            <button class="timeline-toggle w-full text-left p-5 font-bold text-xl text-teal-700 flex justify-between items-center">
+                                <span>1980s-Present: The P300 (EEG)</span>
+                                <span class="timeline-icon text-2xl">+</span>
+                            </button>
+                            <div class="timeline-content hidden p-5 pt-0 text-slate-700 leading-relaxed">
+                                The discovery of the P300 Event-Related Potential (ERP) provided a new tool. This is a brainwave spike that occurs ~300ms after a person recognizes a *rare and meaningful* stimulus. This led to the Concealed Information Test (CIT), where a guilty suspect's brain "gives away" recognition of crime details.
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-md border border-slate-200">
+                            <button class="timeline-toggle w-full text-left p-5 font-bold text-xl text-teal-700 flex justify-between items-center">
+                                <span>1990s-Present: fMRI & Cognitive Load</span>
+                                <span class="timeline-icon text-2xl">+</span>
+                            </button>
+                            <div class="timeline-content hidden p-5 pt-0 text-slate-700 leading-relaxed">
+                                Functional Magnetic Resonance Imaging (fMRI) allowed researchers to see *which* brain regions activate during deception. Studies consistently show increased activity in the prefrontal cortex and other areas related to *executive control* and *cognitive load*. This reinforces the idea that lying is "hard work" for the brain, as it must invent a falsehood while inhibiting the truth.
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-md border border-slate-200">
+                            <button class="timeline-toggle w-full text-left p-5 font-bold text-xl text-teal-700 flex justify-between items-center">
+                                <span>2000s-Present: Machine Learning</span>
+                                <span class="timeline-icon text-2xl">+</span>
+                            </button>
+                            <div class="timeline-content hidden p-5 pt-0 text-slate-700 leading-relaxed">
+                                With more data, machine learning (ML) models (like SVMs, Random Forests, and now Deep Learning) began to outperform human experts. ML can analyze hundreds of linguistic, vocal, and physiological features simultaneously. The current frontier is *multi-modal ML*, which fuses these different data streams for the most robust predictions.
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <section id="linguistic" data-section>
+                    <h2 class="text-3xl font-bold text-slate-800 mb-6">Linguistic Cues to Deception</h2>
+                    <p class="text-lg text-slate-700 leading-relaxed mb-8">
+                        Language is a rich source of data. Deception often leaks through *how* we say something, not just *what* we say. Research has identified several consistent patterns. Click the categories below for details.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="linguistic-grid">
+                        
+                        <div class="bg-white rounded-lg shadow-md border border-slate-200 overflow-hidden">
+                            <button class="linguistic-toggle w-full text-left p-5 font-bold text-xl text-teal-700">
+                                Quantity & Complexity
+                            </button>
+                            <div class="linguistic-content hidden p-5 pt-0 text-slate-700 leading-relaxed">
+                                Deceivers often provide less information. Their stories tend to be shorter, with less complex sentence structures and a less diverse vocabulary. This is a sign of cognitive load—it's hard to invent a rich, detailed story.
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-md border border-slate-200 overflow-hidden">
+                            <button class="linguistic-toggle w-full text-left p-5 font-bold text-xl text-teal-700">
+                                Non-Immediacy
+                            </button>
+                            <div class="linguistic-content hidden p-5 pt-0 text-slate-700 leading-relaxed">
+                                Liars tend to psychologically distance themselves from their story. This manifests as using fewer first-person pronouns (e.g., "I," "me," "my") and using more linguistic "hedges" or modifiers (e.g., "maybe," "perhaps," "sort of").
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-md border border-slate-200 overflow-hidden">
+                            <button class="linguistic-toggle w-full text-left p-5 font-bold text-xl text-teal-700">
+                                Affect & Emotion
+                            </button>
+                            <div class="linguistic-content hidden p-5 pt-0 text-slate-700 leading-relaxed">
+                                Deceptive narratives often contain more negative emotion words (e.g., "sad," "angry," "hate"). This can be a sign of guilt or discomfort with the deception. They may also show a mismatch between stated emotion and vocal tone.
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-md border border-slate-200 overflow-hidden">
+                            <button class="linguistic-toggle w-full text-left p-5 font-bold text-xl text-teal-700">
+                                Specificity
+                            </button>
+                            <div class="linguistic-content hidden p-5 pt-0 text-slate-700 leading-relaxed">
+                                Truthful accounts are often rich in specific, verifiable details (e.g., times, places, sensory information). Deceptive accounts tend to be more vague and general, as these details are harder to invent and maintain consistently.
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <section id="neuro" data-section>
+                    <h2 class="text-3xl font-bold text-slate-800 mb-6">Neuro-Cognitive Signatures</h2>
+                    <p class="text-lg text-slate-700 leading-relaxed mb-8">
+                        Instead of measuring stress, neuroscience targets the brain itself. Deception is an executive function that creates a measurable cognitive load. The two primary tools for this are fMRI and EEG.
+                    </p>
+                    <div class="flex flex-col md:flex-row gap-8">
+                        
+                        <div class="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                            <h3 class="text-2xl font-bold text-teal-700 mb-4">fMRI: The "Where" of Deception</h3>
+                            <p class="text-slate-700 mb-4">fMRI (Functional Magnetic Resonance Imaging) measures blood flow to different brain regions. Deception consistently activates areas associated with executive control and conflict monitoring.</p>
+                            <p class="text-slate-700 mb-4"><strong>Key Regions:</strong> Hover over the hotspots on the diagram.</p>
+                            <div class="brain-diagram">
+                                <div class="brain-hotspot hotspot-pfc">
+                                    <div class="hotspot-info"><strong>Prefrontal Cortex (PFC):</strong> Involved in working memory, planning, and *inhibiting* the truthful response.</div>
+                                </div>
+                                <div class="brain-hotspot hotspot-insula">
+                                    <div class="hotspot-info"><strong>Anterior Insula:</strong> Linked to emotional awareness, conflict, and the subjective feeling of "wrongness" or arousal.</div>
+                                </div>
+                            </div>
+                            <p class="text-slate-700 mt-4"><strong>Challenges:</strong> fMRI is extremely expensive, slow, and requires the subject to be perfectly still. Furthermore, it's hard to prove that the activation is *specific* to lying and not just to general cognitive effort or anxiety.</p>
+                        </div>
+                        
+                        <div class="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                            <h3 class="text-2xl font-bold text-teal-700 mb-4">EEG: The "When" of Deception</h3>
+                            <p class="text-slate-700 mb-4">EEG (Electroencephalography) measures electrical activity with millisecond-precision. Its most powerful use is in the <strong>Concealed Information Test (CIT)</strong>, which uses the <strong>P300</strong> brainwave.</p>
+                            <p class="text-slate-700 mb-4">The P300 is a "recognition spike" that occurs when a person sees a rare, meaningful item. In a CIT, a suspect is shown items (e.g., potential murder weapons). An innocent person's brain treats all items as irrelevant. A guilty person's brain will involuntarily "spike" when they see the *actual* item they recognize from the crime.</p>
+                            <div class="chart-container mt-6">
+                                <canvas id="p300Chart"></canvas>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="abstract-generator" class="mb-16 md:mb-24 scroll-mt-20 bg-teal-50 p-8 md:p-12 rounded-xl shadow-lg border border-teal-200">
-            <h2 class="text-2xl md:text-3xl font-bold text-center mb-10 text-teal-800">Review Article Drafting Assistant ✨</h2>
-            <p class="text-center max-w-3xl mx-auto text-teal-700 mb-8">Use the power of Generative AI to draft a review article abstract based on your current application filters (Disease & Task). The AI will synthesize current research trends and identify relevant sources to suggest a scope and conclusion.</p>
-            
-            <div class="max-w-4xl mx-auto">
-                <button id="generate-abstract-btn" class="w-full bg-[#8C6A5D] hover:bg-[#A98C81] text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-md flex items-center justify-center">
-                    <span class="mr-2">✨</span> Generate Abstract Draft for Current Topic
-                </button>
+                </section>
                 
-                <div id="abstract-loading" class="hidden mt-6 text-center text-teal-600 font-semibold">
-                    <div class="animate-spin inline-block w-6 h-6 border-4 border-current border-t-transparent rounded-full mr-2"></div>
-                    Drafting the abstract... (This uses Google Search grounding for real-time data.)
-                </div>
-                
-                <div id="abstract-output" class="mt-6 p-6 bg-white border border-teal-300 rounded-lg shadow-inner min-h-[150px]">
-                    <h4 class="text-xl font-semibold mb-2 text-[#4A4A4A]">Generated Abstract:</h4>
-                    <p id="abstract-text" class="text-gray-700 italic">The generated abstract will appear here...</p>
-                    <div id="abstract-sources" class="mt-4 text-sm text-gray-500 hidden">
-                        <h5 class="font-semibold">Sources Used:</h5>
-                        <ul id="sources-list" class="list-disc list-inside ml-4 mt-1 space-y-1"></ul>
+                <section id="ml_projects" data-section>
+                    <h2 class="text-3xl font-bold text-slate-800 mb-6">Multi-modal ML Projects</h2>
+                    <p class="text-lg text-slate-700 leading-relaxed mb-8">
+                        The most promising results come from *fusing* data sources. Machine learning models, particularly deep learning, are adept at finding patterns across different modalities (e.g., text, audio, video, neuro-signals). Filter the examples below.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-8" id="filter-container">
+                        <button class="filter-btn bg-teal-600 text-white px-4 py-2 rounded-full font-semibold" data-filter="all">All</button>
+                        <button class="filter-btn bg-slate-200 text-slate-700 px-4 py-2 rounded-full font-semibold" data-filter="neuro">Linguistic + Neuro</button>
+                        <button class="filter-btn bg-slate-200 text-slate-700 px-4 py-2 rounded-full font-semibold" data-filter="physio">Linguistic + Physio/Behavioral</button>
                     </div>
-                </div>
-            </div>
-        </section>
 
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="projects-grid">
+                        
+                        <div class="project-card bg-white p-6 rounded-lg shadow-md border border-slate-200" data-type="physio">
+                            <h3 class="text-xl font-bold text-teal-700 mb-2">Bimodal CNN (Text + Physiological)</h3>
+                            <p class="text-slate-700">This approach uses a Convolutional Neural Network (CNN) to analyze two streams: 1) Linguistic features extracted from interview transcripts, and 2) Physiological data (like heart rate, GSR) averaged over time. Research shows this bimodal fusion significantly outperforms models trained on only one modality.</p>
+                            <div class="mt-4 text-sm font-semibold text-slate-500">Modalities: Text, Physiological</div>
+                        </div>
 
-        <section id="challenges" class="scroll-mt-20">
-            <h2 class="text-2xl md:text-3xl font-bold text-center mb-10">Challenges & Future Directions</h2>
-             <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">A forward-looking review must critically evaluate current limitations and speculate on future trends. This section outlines the major hurdles and promising avenues in the field. Your paper should dedicate a significant portion to discussing these points, citing recent literature that proposes solutions or new directions.</p>
-            <div class="space-y-4 max-w-4xl mx-auto">
-                <details class="group bg-white p-4 rounded-lg shadow-sm cursor-pointer">
-                    <summary class="flex justify-between items-center font-semibold text-gray-800">
-                        Technical & Data Hurdles
-                        <span class="transform transition-transform duration-300 group-open:rotate-180">&#9660;</span>
-                    </summary>
-                    <p class="mt-2 text-gray-600">Discuss issues like lack of standardized data formats, variability from stain and scanner differences (domain shift), and the immense computational cost of training models on gigapixel images.</p>
-                </details>
-                <details class="group bg-white p-4 rounded-lg shadow-sm cursor-pointer">
-                    <summary class="flex justify-between items-center font-semibold text-gray-800">
-                        Regulatory & Clinical Adoption
-                        <span class="transform transition-transform duration-300 group-open:rotate-180">&#9660;</span>
-                    </summary>
-                    <p class="mt-2 text-gray-600">Review the process for regulatory approval (e.g., FDA, CE marking) for AI algorithms as medical devices. Analyze pathologist trust, workflow integration, and the need for large-scale clinical validation studies.</p>
-                </details>
-                <details class="group bg-white p-4 rounded-lg shadow-sm cursor-pointer">
-                    <summary class="flex justify-between items-center font-semibold text-gray-800">
-                        Ethical Considerations
-                        <span class="transform transition-transform duration-300 group-open:rotate-180">&#9660;</span>
-                    </summary>
-                    <p class="mt-2 text-gray-600">Explore concerns related to data privacy (patient anonymity), potential for algorithmic bias (e.g., performance differences across populations), and the "black box" nature of some deep learning models.</p>
-                </details>
-                <details class="group bg-white p-4 rounded-lg shadow-sm cursor-pointer">
-                    <summary class="flex justify-between items-center font-semibold text-gray-800">
-                        Future Outlook: Multimodal AI & Explainability
-                        <span class="transform transition-transform duration-300 group-open:rotate-180">&#9660;</span>
-                    </summary>
-                    <p class="mt-2 text-gray-600">Discuss emerging research in combining WSI data with genomics, proteomics, and clinical data (multimodal AI). Explore the push for explainable AI (XAI) to make model predictions more interpretable for pathologists.</p>
-                </details>
-            </div>
-        </section>
+                        <div class="project-card bg-white p-6 rounded-lg shadow-md border border-slate-200" data-type="physio">
+                            <h3 class="text-xl font-bold text-teal-700 mb-2">Real-time AVT Fusion (Audio + Video + Text)</h3>
+                            <p class="text-slate-700">A system designed for real-time analysis, this model fuses three data streams. It extracts acoustic features (vocal pitch, jitter), visual features (facial micro-expressions, gaze), and linguistic features (from real-time transcription). Fusing these behavioral cues has achieved very high accuracy in high-stakes scenarios.</p>
+                            <div class="mt-4 text-sm font-semibold text-slate-500">Modalities: Audio, Video, Text</div>
+                        </div>
+                        
+                        <div class="project-card bg-white p-6 rounded-lg shadow-md border border-slate-200" data-type="neuro">
+                            <h3 class="text-xl font-bold text-teal-700 mb-2">EEG-Linguistic Correlation</h3>
+                            <p class="text-slate-700">These models aim to correlate EEG signals (like ERPs or frequency band power) with specific linguistic events. For example, does the brain show a conflict-related signal (like an N400 or P300) *immediately* after a subject uses a hedge word ("maybe") or a non-committal phrase? This tight temporal link is a powerful area of research.</p>
+                            <div class="mt-4 text-sm font-semibold text-slate-500">Modalities: Text, EEG</div>
+                        </div>
 
-    </main>
+                        <div class="project-card bg-white p-6 rounded-lg shadow-md border border-slate-200" data-type="physio">
+                            <h3 class="text-xl font-bold text-teal-700 mb-2">Gaze + Speech Attention Models</h3>
+                            <p class="text-slate-700">Using an LSTM (Long Short-Term Memory) network with an attention mechanism, this model analyzes gaze patterns and speech features. The model learns that, for example, averted gaze *while* discussing a key topic, or a mismatch between gaze and semantic focus, is highly predictive of deception.</p>
+                            <div class="mt-4 text-sm font-semibold text-slate-500">Modalities: Gaze, Audio, Text</div>
+                        </div>
+                    </div>
+                </section>
 
-    <footer class="bg-white mt-16 md:mt-24">
-        <div class="container mx-auto py-4 px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm">
-            <p>Interactive Research Roadmap | Generated to assist in academic writing.</p>
+                <section id="proposals" data-section>
+                    <h2 class="text-3xl font-bold text-slate-800 mb-6">Proposed Computational Approaches</h2>
+                    <p class="text-lg text-slate-700 leading-relaxed mb-8">
+                        Based on this research, several advanced computational projects can be proposed. These models aim to create more robust, accurate, and insightful systems by leveraging multi-modal data and modern deep learning architectures.
+                    </p>
+                    
+                    <div class="bg-white rounded-lg shadow-md border border-slate-200">
+                        <div class="flex flex-wrap border-b border-slate-200" id="tabs-container">
+                            <button class="tab-btn active font-semibold py-3 px-5" data-tab="model1">1. Fusion (EEG+Text)</button>
+                            <button class="tab-btn font-semibold py-3 px-5 text-slate-600" data-tab="model2">2. Cognitive Load (Vocal+Gaze)</button>
+                            <button class="tab-btn font-semibold py-3 px-5 text-slate-600" data-tab="model3">3. 3D-CNN (fMRI)</button>
+                            <button class="tab-btn font-semibold py-3 px-5 text-slate-600" data-tab="model4">4. GAN Deception Generator</button>
+                            <button class="tab-btn font-semibold py-3 px-5 text-slate-600" data-tab="model5">5. P300 Feature Classifier</button>
+                        </div>
+
+                        <div class="p-6">
+                            <div class="tab-content" id="model1">
+                                <h3 class="text-2xl font-bold text-teal-700 mb-4">Model 1: Multi-modal Fusion (EEG+Text)</h3>
+                                <p class="text-slate-700 mb-4"><strong>Concept:</strong> A deep learning model that simultaneously processes linguistic content and time-locked EEG data. The model would learn not just *what* is said, but also the brain's real-time reaction to saying it.</p>
+                                <p class="text-slate-700 mb-4"><strong>Data Inputs:</strong> 1) Synchronized, pre-processed EEG time-series data. 2) Transcribed text, aligned with the EEG data.</p>
+                                <p class="text-slate-700 mb-4"><strong>Architecture:</strong> A two-branch network:</p>
+                                <div class="model-diagram my-6">
+                                    <div class="model-diagram-row">
+                                        <div class="model-block">EEG Time-Series</div>
+                                        <div class="model-block">Transcribed Text</div>
+                                    </div>
+                                    <div class="model-diagram-row">
+                                        <div class="model-arrow">↓</div>
+                                        <div class="model-arrow">↓</div>
+                                    </div>
+                                    <div class="model-diagram-row">
+                                        <div class="model-block">1D CNN / LSTM</div>
+                                        <div class="model-block">BERT / Transformer</div>
+                                    </div>
+                                    <div class="model-diagram-row">
+                                        <div class="model-arrow">↘</div>
+                                        <div class="model-arrow">↙</div>
+                                    </div>
+                                    <div class="model-block">Concatenated Feature Vector</div>
+                                    <div class="model-arrow">↓</div>
+                                    <div class="model-block">MLP Classifier</div>
+                                    <div class="model-arrow">↓</div>
+                                    <div class="model-block font-bold text-teal-700">Prediction (Truth / Deception)</div>
+                                </div>
+                                <p class="text-slate-700"><strong>Key Challenges:</strong> Precise time-synchronization of text and EEG signals. High signal-to-noise ratio required for EEG. Large, labeled datasets are scarce.</p>
+                            </div>
+
+                            <div class="tab-content hidden" id="model2">
+                                <h3 class="text-2xl font-bold text-teal-700 mb-4">Model 2: Real-time Cognitive Load Monitor (Vocal+Gaze)</h3>
+                                <p class="text-slate-700 mb-4"><strong>Concept:</strong> A model that *infers* cognitive load, a strong proxy for deception, by analyzing non-invasive behavioral cues: vocal prosody and eye-tracking.</p>
+                                <p class="text-slate-700 mb-4"><strong>Data Inputs:</strong> 1) Raw audio stream (for vocal features like pitch, jitter, shimmer, speech pace). 2) Eye-tracking data (saccade frequency, pupil dilation, gaze aversion).</p>
+                                <p class="text-slate-700 mb-4"><strong>Architecture:</strong> A time-series model (like an RNN or LSTM) that processes features extracted from both streams.</p>
+                                <div class="model-diagram my-6">
+                                    <div class="model-diagram-row">
+                                        <div class="model-block">Audio Stream</div>
+                                        <div class="model-block">Eye-Tracker Data</div>
+                                    </div>
+                                    <div class="model-diagram-row">
+                                        <div class="model-arrow">↓</div>
+                                        <div class="model-arrow">↓</div>
+                                    </div>
+                                    <div class="model-diagram-row">
+                                        <div class="model-block">Feature Extraction (e.g., MFCCs, Pitch)</div>
+                                        <div class="model-block">Feature Extraction (e.g., Saccades)</div>
+                                    </div>
+                                    <div class="model-diagram-row">
+                                        <div class="model-arrow">↘</div>
+                                        <div class="model-arrow">↙</div>
+                                    </div>
+                                    <div class="model-block">Fused Time-Series Features</div>
+                                    <div class="model-arrow">↓</div>
+                                    <div class="model-block">LSTM / GRU Network</div>
+                                    <div class="model-arrow">↓</div>
+                                    <div class="model-block font-bold text-teal-700">Real-time Cognitive Load Score</div>
+                                </div>
+                                <p class="text-slate-700"><strong>Key Challenges:</strong> Real-time feature extraction is computationally intensive. Gaze data can be noisy. Calibrating a "baseline" cognitive load for each individual.</p>
+                            </div>
+
+                            <div class="tab-content hidden" id="model3">
+                                <h3 class="text-2xl font-bold text-teal-700 mb-4">Model 3: 3D Convolutional Neural Network (fMRI)</h3>
+                                <p class="text-slate-700 mb-4"><strong>Concept:</strong> Leverage the full spatial *and* temporal information in an fMRI scan. Instead of analyzing pre-selected regions, a 3D-CNN can learn complex 4D spatio-temporal patterns across the entire brain that predict deception.</p>
+                                <p class="text-slate-700 mb-4"><strong>Data Inputs:</strong> Full 4D fMRI BOLD signal data (3D brain volume over time), labeled by trial (truth/deception).</p>
+                                <p class="text-slate-700 mb-4"><strong>Architecture:</strong> A 3D-CNN (or a Video-CNN architecture) that treats the time-series of brain scans as a "video."</p>
+                                <div class="model-diagram my-6">
+                                    <div class="model-block">4D fMRI Scan Data (x, y, z, time)</div>
+                                    <div class="model-arrow">↓</div>
+                                    <div class="model-block">(3D + time) Convolutional Layers</div>
+                                    <div class="model-arrow">↓</div>
+                                    <div class="model-block">Pooling & Flattening</div>
+                                    <div class="model-arrow">↓</div>
+                                    <div class="model-block">Fully Connected Classifier</div>
+                                    <div class="model-arrow">↓</div>
+                                    <div class="model-block font-bold text-teal-700">Prediction (Truth / Deception)</div>
+                                </div>
+                                <p class="text-slate-700"><strong>Key Challenges:</strong> Extremely high dimensionality of data. Very small datasets (fMRI studies are expensive). High risk of overfitting. Disentangling "deception" patterns from "task-related" patterns.</p>
+                            </div>
+                            
+                            <div class="tab-content hidden" id="model4">
+                                <h3 class="text-2xl font-bold text-teal-700 mb-4">Model 4: Adversarial Deception Generator (GAN)</h3>
+                                <p class="text-slate-700 mb-4"><strong>Concept:</strong> Use a Generative Adversarial Network (GAN) to build a more robust *detector*. A "Generator" network tries to create deceptive text that *mimics* truthful language. A "Discriminator" network (our detector) is trained to distinguish real truthful text from the Generator's "fake" deceptive text.</p>
+                                <p class="text-slate-700 mb-4"><strong>Data Inputs:</strong> Large corpus of known truthful text and known deceptive text.</p>
+                                <p class="text-slate-700 mb-4"><strong>Architecture:</strong> A classic GAN setup, likely using Transformer-based models (like GPT/BERT) as the Generator and Discriminator.</p>
+                                <div class="model-diagram my-6">
+                                    <div class="model-block">Noise + Truthful Context</div>
+                                    <div class="model-arrow">↓</div>
+                                    <div class="model-block">Generator (e.g., GPT-2)</div>
+                                    <div class="model-arrow">↓</div>
+                                    <div class="model-block">"Fake" Deceptive Text</div>
+                                    <div class="model-arrow">↘</div>
+                                    <div class="model-block">Discriminator (e.g., BERT)</div>
+                                    <div class="model-arrow">↙</div>
+                                    <div class="model-block">"Real" Deceptive Text</div>
+                                    <div class="model-arrow">↓</div>
+                                    <div class="model-block font-bold text-teal-700">Prediction (Real / Fake)</div>
+                                </div>
+                                <p class="text-slate-700"><strong>Key Challenges:</strong> Training GANs for text is notoriously difficult. Defining a clear "style" of deception for the generator to learn. The model might learn to exploit dataset biases rather than true deceptive cues.</p>
+                            </div>
+
+                            <div class="tab-content hidden" id="model5">
+                                <h3 class="text-2xl font-bold text-teal-700 mb-4">Model 5: P300 Feature-based Classifier (EEG)</h3>
+                                <p class="text-slate-700 mb-4"><strong>Concept:</strong> A more "classic" ML approach that is highly effective and interpretable. Instead of feeding raw EEG to a deep learning model, this extracts well-understood features from the P300 component (e.g., amplitude, latency) and feeds them to a powerful but simpler classifier.</p>
+                                <p class="text-slate-700 mb-4"><strong>Data Inputs:</strong> Epoched EEG data, time-locked to the "probe" (crime detail) and "irrelevant" stimuli from a CIT.</p>
+                                <p class="text-slate-700 mb-4"><strong>Architecture:</strong> A feature-extraction pipeline followed by a classifier.</p>
+                                <div class="model-diagram my-6">
+                                    <div class="model-block">EEG Epochs (Probe vs. Irrelevant)</div>
+                                    <div class="model-arrow">↓</div>
+                                    <div class="model-block">Feature Extraction Pipeline</div>
+                                    <div class="model-block" style="background-color: #f3f4f6; border: none; box-shadow: none; font-weight: 400; text-align: left; padding: 0 1rem;">
+                                        - P300 Amplitude
+                                        <br>- P300 Latency
+                                        <br>- Frequency Band Power (Alpha, Theta)
+                                    </div>
+                                    <div class="model-arrow">↓</div>
+                                    <div class="model-block">Feature Vector</div>
+                                    <div class="model-arrow">↓</div>
+                                    <div class="model-block">XGBoost / SVM / Random Forest</div>
+                                    <div class="model-arrow">↓</div>
+                                    <div class="model-block font-bold text-teal-700">Prediction (Guilty / Innocent)</div>
+                                </div>
+                                <p class="text-slate-700"><strong>Key Challenges:</strong> Susceptible to countermeasures (though new protocols reduce this). Signal quality is paramount. Requires a strict, controlled CIT paradigm, which isn't always possible.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
         </div>
-    </footer>
+    </div>
 
     <script>
-        const API_URL_BASE = 'https://generativelanguage.googleapis.com/v1beta/models/';
-        const apiKey = ""; 
-
-        async function fetchWithExponentialBackoff(url, options, maxRetries = 5) {
-            for (let i = 0; i < maxRetries; i++) {
-                try {
-                    const response = await fetch(url, options);
-                    if (response.status !== 429) {
-                        return response;
-                    }
-                } catch (error) {
-                    if (i === maxRetries - 1) throw error;
-                }
-                await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
-            }
-            throw new Error('API request failed after multiple retries.');
-        }
-
-        function base64ToArrayBuffer(base64) {
-            const binaryString = atob(base64);
-            const len = binaryString.length;
-            const bytes = new Uint8Array(len);
-            for (let i = 0; i < len; i++) {
-                bytes[i] = binaryString.charCodeAt(i);
-            }
-            return bytes.buffer;
-        }
-
-        function pcmToWav(pcmData, sampleRate) {
-            const buffer = new ArrayBuffer(44 + pcmData.length * 2);
-            const view = new DataView(buffer);
-            let offset = 0;
-
-            function writeString(str) {
-                for (let i = 0; i < str.length; i++) {
-                    view.setUint8(offset + i, str.charCodeAt(i));
-                }
-                offset += str.length;
-            }
-
-            function writeUint32(val) {
-                view.setUint32(offset, val, true);
-                offset += 4;
-            }
-
-            function writeUint16(val) {
-                view.setUint16(offset, val, true);
-                offset += 2;
-            }
-
-            writeString('RIFF');
-            writeUint32(36 + pcmData.length * 2);
-            writeString('WAVE');
-
-            writeString('fmt ');
-            writeUint32(16);
-            writeUint16(1);
-            writeUint16(1);
-            writeUint32(sampleRate);
-            writeUint32(sampleRate * 2);
-            writeUint16(2);
-            writeUint16(16);
-
-            writeString('data');
-            writeUint32(pcmData.length * 2);
-
-            for (let i = 0; i < pcmData.length; i++) {
-                view.setInt16(offset, pcmData[i], true);
-                offset += 2;
-            }
-
-            return new Blob([view], { type: 'audio/wav' });
-        }
-
-
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             
-            const timelineData = [
-                { year: 'c. 1890s', title: 'Early Photomicrography', description: 'The first attempts to capture microscope images on photographic plates, laying the groundwork for imaging in pathology.', points: ['Who were the pioneers of photomicrography?', 'What were the technical limitations of this era?', 'How did this change pathology reporting?'] },
-                { year: '1986', title: 'First Telerobotic Microscopy', description: 'Development of systems allowing pathologists to remotely control a microscope, a precursor to telepathology.', points: ['Analyze the motivations behind remote microscopy (e.g., expert consultation).', 'Discuss the technologies involved (robotics, video transmission).', 'Evaluate the impact on collaborative diagnostics.'] },
-                { year: 'c. 1999', title: 'Virtual Microscopy Emerges', description: 'The concept of scanning an entire slide to create a "virtual slide" that can be viewed on a computer screen begins to take shape.', points: ['Compare early virtual microscopy systems to modern WSI.', 'What were the storage and computational challenges?', 'Who were the key academic and commercial players?'] },
-                { year: 'c. 2000s', title: 'Commercial WSI Scanners', description: 'The availability of the first commercial whole slide imaging scanners marks the true beginning of the digital pathology era.', points: ['Review the first generation of commercial scanners.', 'How did their availability change research and clinical practice?', 'Discuss the initial cost and workflow barriers.'] },
-                { year: 'c. 2012', title: 'Deep Learning Revolution', description: 'Breakthroughs in deep learning (e.g., AlexNet) provide powerful new tools for image analysis, which are quickly adapted for medical imaging.', points: ['Explain why deep learning is well-suited for pathology images.', 'Contrast deep learning with traditional machine learning approaches.', 'Cite early seminal papers applying CNNs to pathology.'] },
-                { year: '2017', title: 'First FDA Approval for Primary Diagnosis', description: 'The FDA approves a WSI system for primary diagnostic use in the US, a major regulatory milestone for digital pathology.', points: ['Analyze the significance of this regulatory approval.', 'What evidence was required for the approval?', 'How did this impact the adoption of digital pathology in clinical settings?'] }
-            ];
-
-            const timelineContainer = document.getElementById('timeline-container');
-            const detailsTitle = document.getElementById('details-title');
-            const detailsDescription = document.getElementById('details-description');
-            const detailsPoints = document.getElementById('details-points');
-
-            timelineData.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.className = `timeline-item relative mb-8 pl-4 cursor-pointer`;
-                div.innerHTML = `<p class="font-bold text-sm text-[#8C6A5D]">${item.year}</p><h4 class="font-semibold">${item.title}</h4>`;
-                div.addEventListener('click', () => {
-                    document.querySelectorAll('.timeline-item').forEach(el => el.classList.remove('active'));
-                    div.classList.add('active');
-                    detailsTitle.textContent = item.title;
-                    detailsDescription.textContent = item.description;
-                    detailsPoints.innerHTML = item.points.map(p => `<li>${p}</li>`).join('');
-                });
-                timelineContainer.appendChild(div);
-            });
-
-            const firstTimelineItem = timelineContainer.querySelector('.timeline-item');
-            if (firstTimelineItem) {
-                firstTimelineItem.click();
-            }
-
-            const applicationsData = [
-                { id: 1, disease: 'Breast Cancer', task: 'Diagnosis', title: 'Mitotic Figure Counting', research: 'Review algorithms for automated detection and counting of mitotic figures in H&E stained slides for grading breast cancer. Compare performance with manual pathologist counts and discuss challenges like mimicry.', publications: { '2020': 120, '2021': 150, '2022': 180, '2023': 220, '2024': 250 } },
-                { id: 2, disease: 'Prostate Cancer', task: 'Diagnosis', title: 'Gleason Grading', research: 'Analyze deep learning models for automated Gleason grading of prostate biopsies. Discuss the challenge of grading borderline patterns (e.g., Gleason 3+4 vs 4+3) and the impact on clinical decisions.', publications: { '2020': 110, '2021': 140, '2022': 190, '2023': 230, '2024': 260 } },
-                { id: 3, disease: 'Lung Cancer', task: 'Prognosis', title: 'Predicting Survival', research: 'Explore AI models that use features from tumor morphology in WSIs to predict patient survival outcomes, often outperforming traditional staging. Discuss the concept of "morphological biomarkers".', publications: { '2020': 80, '2021': 110, '2022': 150, '2023': 190, '2024': 230 } },
-                { id: 4, disease: 'Colon Cancer', task: 'Prognosis', title: 'Tumor-Infiltrating Lymphocytes (TILs)', research: 'Review methods for quantifying TILs in the tumor microenvironment from WSIs. Discuss the prognostic significance of TIL density and spatial distribution in colorectal cancer.', publications: { '2020': 70, '2021': 90, '2022': 130, '2023': 160, '2024': 200 } },
-                { id: 5, disease: 'Breast Cancer', task: 'Prognosis', title: 'Genomic Prediction from Histology', research: 'Discuss the "image-to-omics" approach where AI models predict genomic alterations (e.g., ER/PR status, HER2 amplification) directly from H&E images, potentially reducing the need for costly molecular tests.', publications: { '2020': 90, '2021': 130, '2022': 170, '2023': 210, '2024': 250 } },
-                { id: 6, disease: 'General', task: 'Diagnosis', title: 'Tumor Detection & Segmentation', research: 'Cover the fundamental task of training models to identify and outline tumor regions in a WSI. This is often a preliminary step for more advanced analysis. Discuss different model architectures (e.g., U-Net).', publications: { '2020': 200, '2021': 250, '2022': 300, '2023': 350, '2024': 400 } }
-            ];
-
-            const diseaseFilter = document.getElementById('disease-filter');
-            const taskFilter = document.getElementById('task-filter');
-            const applicationsList = document.getElementById('applications-list');
-            
-            const diseases = ['All', ...new Set(applicationsData.map(a => a.disease))];
-            const tasks = ['All', ...new Set(applicationsData.map(a => a.task))];
-
-            diseases.forEach(d => {
-                const option = document.createElement('option');
-                option.value = d;
-                option.textContent = d;
-                diseaseFilter.appendChild(option);
-            });
-
-            tasks.forEach(t => {
-                const option = document.createElement('option');
-                option.value = t;
-                option.textContent = t;
-                taskFilter.appendChild(option);
-            });
-
-            let applicationsChart;
-            const ctx = document.getElementById('applicationsChart').getContext('2d');
-
-            function renderApplications(filteredData) {
-                applicationsList.innerHTML = '';
-                if(filteredData.length === 0) {
-                    applicationsList.innerHTML = '<p class="text-gray-500">No matching applications found.</p>';
-                    return;
-                }
-                filteredData.forEach(app => {
-                    const div = document.createElement('div');
-                    div.className = 'bg-white p-4 rounded-lg border border-gray-200';
-                    div.innerHTML = `<h4 class="font-semibold text-[#4A4A4A]">${app.title} (${app.disease} - ${app.task})</h4><p class="text-gray-600">${app.research}</p>`;
-                    applicationsList.appendChild(div);
-                });
-            }
-            
-            function renderChart(filteredData) {
-                const aggregatedData = filteredData.reduce((acc, curr) => {
-                    Object.entries(curr.publications).forEach(([year, count]) => {
-                        acc[year] = (acc[year] || 0) + count;
-                    });
-                    return acc;
-                }, {});
-
-                const labels = Object.keys(aggregatedData).sort();
-                const data = labels.map(label => aggregatedData[label]);
-
-                if (applicationsChart) {
-                    applicationsChart.destroy();
-                }
-                applicationsChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Number of Publications (Mock Data)',
-                            data: data,
-                            backgroundColor: 'rgba(140, 106, 93, 0.6)',
-                            borderColor: 'rgba(140, 106, 93, 1)',
+            const p300Ctx = document.getElementById('p300Chart').getContext('2d');
+            new Chart(p300Ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Irrelevant Item 1', 'Irrelevant Item 2', 'Crime Detail (Probe)', 'Irrelevant Item 3', 'Irrelevant Item 4'],
+                    datasets: [
+                        {
+                            label: 'Innocent Subject',
+                            data: [10, 12, 11, 9, 13],
+                            backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
                             borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: { display: true, text: 'Publications' }
-                            },
-                            x: {
-                                title: { display: true, text: 'Year' }
-                            }
                         },
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return ` Publications: ${context.parsed.y}`;
+                        {
+                            label: 'Guilty Subject (P300)',
+                            data: [11, 9, 35, 10, 12],
+                            backgroundColor: 'rgba(239, 68, 68, 0.6)',
+                            borderColor: 'rgba(239, 68, 68, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Brainwave Amplitude (µV)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
                                     }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y + ' µV';
+                                    }
+                                    return label;
                                 }
                             }
                         }
                     }
-                });
-            }
-
-            function filterAndRender() {
-                const selectedDisease = diseaseFilter.value;
-                const selectedTask = taskFilter.value;
-
-                let filtered = applicationsData;
-
-                if (selectedDisease !== 'All') {
-                    filtered = filtered.filter(a => a.disease === selectedDisease);
                 }
-                if (selectedTask !== 'All') {
-                    filtered = filtered.filter(a => a.task === selectedTask);
-                }
-                
-                renderApplications(filtered);
-                renderChart(filtered);
-            }
+            });
 
-            diseaseFilter.addEventListener('change', filterAndRender);
-            taskFilter.addEventListener('change', filterAndRender);
-            
-            filterAndRender();
-
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('.nav-link');
-
-            window.addEventListener('scroll', () => {
-                let current = '';
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    if (pageYOffset >= sectionTop - 80) {
-                        current = section.getAttribute('id');
+            const timelineToggles = document.querySelectorAll('.timeline-toggle');
+            timelineToggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const content = toggle.nextElementSibling;
+                    const icon = toggle.querySelector('.timeline-icon');
+                    const isHidden = content.classList.contains('hidden');
+                    
+                    document.querySelectorAll('.timeline-content').forEach(c => c.classList.add('hidden'));
+                    document.querySelectorAll('.timeline-icon').forEach(i => i.textContent = '+');
+                    
+                    if (isHidden) {
+                        content.classList.remove('hidden');
+                        icon.textContent = '−';
                     }
                 });
+            });
+            
+            const linguisticToggles = document.querySelectorAll('.linguistic-toggle');
+            linguisticToggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    const content = toggle.nextElementSibling;
+                    content.classList.toggle('hidden');
+                });
+            });
 
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href').includes(current)) {
-                        link.classList.add('active');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const projectCards = document.querySelectorAll('.project-card');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const filter = btn.getAttribute('data-filter');
+                    
+                    filterBtns.forEach(b => {
+                        b.classList.remove('bg-teal-600', 'text-white');
+                        b.classList.add('bg-slate-200', 'text-slate-700');
+                    });
+                    btn.classList.add('bg-teal-600', 'text-white');
+                    btn.classList.remove('bg-slate-200', 'text-slate-700');
+                    
+                    projectCards.forEach(card => {
+                        if (filter === 'all' || card.getAttribute('data-type') === filter) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tab = btn.getAttribute('data-tab');
+                    
+                    tabBtns.forEach(b => {
+                        b.classList.remove('active');
+                        b.classList.add('text-slate-600');
+                    });
+                    btn.classList.add('active');
+                    btn.classList.remove('text-slate-600');
+                    
+                    tabContents.forEach(content => {
+                        if (content.id === tab) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            const navLinks = document.querySelectorAll('.sticky-nav a');
+            const sections = document.querySelectorAll('[data-section]');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const sidebarNav = document.getElementById('sidebar-nav');
+
+            mobileMenuBtn.addEventListener('click', () => {
+                sidebarNav.classList.toggle('-translate-x-full');
+            });
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${entry.target.id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { rootMargin: '-30% 0px -70% 0px', threshold: 0 });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (window.innerWidth < 768) {
+                        sidebarNav.classList.add('-translate-x-full');
                     }
                 });
             });
 
-
-            // --- GEMINI API INTEGRATIONS ---
-
-            const generateAbstractBtn = document.getElementById('generate-abstract-btn');
-            const abstractLoading = document.getElementById('abstract-loading');
-            const abstractText = document.getElementById('abstract-text');
-            const abstractSources = document.getElementById('abstract-sources');
-            const sourcesList = document.getElementById('sources-list');
-
-            async function generateAbstract() {
-                const selectedDisease = diseaseFilter.value;
-                const selectedTask = taskFilter.value;
-
-                abstractText.textContent = 'Awaiting draft...';
-                abstractSources.classList.add('hidden');
-                sourcesList.innerHTML = '';
-                abstractLoading.classList.remove('hidden');
-                generateAbstractBtn.disabled = true;
-
-                const query = `Write a comprehensive, 250-word academic abstract for a review article on Digital Pathology and AI integration. Focus the scope on the application of AI for ${selectedTask} in ${selectedDisease === 'All' ? 'various cancer types' : selectedDisease}. The abstract must include: 1) Background on digital pathology adoption, 2) Scope of the review (key applications and models), 3) Key findings/insights on current performance/trends, and 4) A conclusion on future directions (challenges/multimodal AI).`;
-
-                const systemPrompt = "Act as an expert academic researcher and abstract writer for a high-impact medical journal. Ensure the tone is objective, formal, and scientifically precise. The abstract must be self-contained and highly structured.";
-                
-                const apiUrl = `${API_URL_BASE}gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-                
-                const payload = {
-                    contents: [{ parts: [{ text: query }] }],
-                    tools: [{ "google_search": {} }],
-                    systemInstruction: { parts: [{ text: systemPrompt }] },
-                };
-
-                const options = {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                };
-
-                try {
-                    const response = await fetchWithExponentialBackoff(apiUrl, options);
-                    const result = await response.json();
-                    const candidate = result.candidates?.[0];
-
-                    if (candidate && candidate.content?.parts?.[0]?.text) {
-                        const text = candidate.content.parts[0].text;
-                        abstractText.textContent = text;
-
-                        let sources = [];
-                        const groundingMetadata = candidate.groundingMetadata;
-                        if (groundingMetadata && groundingMetadata.groundingAttributions) {
-                            sources = groundingMetadata.groundingAttributions
-                                .map(attribution => ({ uri: attribution.web?.uri, title: attribution.web?.title }))
-                                .filter(source => source.uri && source.title);
-                        }
-                        
-                        if (sources.length > 0) {
-                            sourcesList.innerHTML = sources.map(s => `<li><a href="${s.uri}" target="_blank" class="text-[#8C6A5D] hover:underline">${s.title}</a></li>`).join('');
-                            abstractSources.classList.remove('hidden');
-                        }
-                    } else {
-                        abstractText.textContent = 'Error: Could not generate abstract. Please try a different query or check the API connection.';
-                    }
-
-                } catch (error) {
-                    console.error('API Error:', error);
-                    abstractText.textContent = 'Error: Failed to connect to the drafting service.';
-                } finally {
-                    abstractLoading.classList.add('hidden');
-                    generateAbstractBtn.disabled = false;
-                }
-            }
-
-            generateAbstractBtn.addEventListener('click', generateAbstract);
-
-            // --- TTS Implementation ---
-
-            const ttsReadBtn = document.getElementById('tts-read-btn');
-            
-            async function speakResearchQuestions() {
-                const listItems = applicationsList.querySelectorAll('p');
-                if (listItems.length === 0) return;
-                
-                ttsReadBtn.disabled = true;
-                const originalText = ttsReadBtn.textContent;
-                ttsReadBtn.textContent = '... Speaking ...';
-
-                const questions = Array.from(listItems).map(p => p.textContent).join('\n\n');
-                const ttsPrompt = `Read the following key research questions for a review article in an informative and clear tone:\n\n${questions}`;
-
-                const apiUrl = `${API_URL_BASE}gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
-                const payload = {
-                    contents: [{ parts: [{ text: ttsPrompt }] }],
-                    generationConfig: {
-                        responseModalities: ["AUDIO"],
-                        speechConfig: {
-                            voiceConfig: { prebuiltVoiceConfig: { voiceName: "Rasalgethi" } }
-                        }
-                    },
-                    model: "gemini-2.5-flash-preview-tts"
-                };
-
-                const options = {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                };
-
-                try {
-                    const response = await fetchWithExponentialBackoff(apiUrl, options);
-                    const result = await response.json();
-                    const part = result?.candidates?.[0]?.content?.parts?.[0];
-                    const audioData = part?.inlineData?.data;
-                    const mimeType = part?.inlineData?.mimeType;
-
-                    if (audioData && mimeType && mimeType.startsWith("audio/")) {
-                        const sampleRateMatch = mimeType.match(/rate=(\d+)/);
-                        const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 16000;
-                        const pcmData = base64ToArrayBuffer(audioData);
-                        const pcm16 = new Int16Array(pcmData);
-                        const wavBlob = pcmToWav(pcm16, sampleRate);
-                        const audioUrl = URL.createObjectURL(wavBlob);
-                        
-                        const audio = new Audio(audioUrl);
-                        audio.play();
-                        audio.onended = () => {
-                            ttsReadBtn.textContent = originalText;
-                            ttsReadBtn.disabled = false;
-                            URL.revokeObjectURL(audioUrl);
-                        };
-                    } else {
-                        console.error('TTS Audio data missing or invalid:', result);
-                        ttsReadBtn.textContent = 'TTS Failed';
-                    }
-                } catch (error) {
-                    console.error('TTS API Error:', error);
-                    ttsReadBtn.textContent = 'TTS Failed';
-                } finally {
-                    if (ttsReadBtn.textContent === 'TTS Failed') {
-                        setTimeout(() => {
-                            ttsReadBtn.textContent = originalText;
-                            ttsReadBtn.disabled = false;
-                        }, 2000);
-                    }
-                }
-            }
-
-            ttsReadBtn.addEventListener('click', speakResearchQuestions);
         });
     </script>
 </body>
