@@ -3,580 +3,578 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chapter 4: Discourse Types | Interactive Learning </title>
+    <title>Mostafa Tamiminezhad | Computational Medicine Researcher</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        /* Custom Scrollbar for cleaner look */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f5f5f4;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #d6d3d1;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a8a29e;
-        }
 
-        /* Chart Container Strict Styling */
+    <!-- Font Awesome (for icons, replacing SVG) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: Warm Neutrals & Medical Teal -->
+    <!-- 
+        Background: #fdfbf7 (Warm Cream)
+        Text Primary: #1f2937 (Gray 800)
+        Text Secondary: #4b5563 (Gray 600)
+        Accent: #0f766e (Teal 700) - Represents Medicine/Biology
+        Secondary Accent: #d97706 (Amber 600) - Highlights
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfbf7;
+            color: #1f2937;
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, .serif-font {
+            font-family: 'Playfair Display', serif;
+        }
         .chart-container {
             position: relative;
             width: 100%;
-            max-width: 800px;
+            max-width: 600px;
             margin-left: auto;
             margin-right: auto;
-            height: 40vh;
-            min-height: 350px;
-            max-height: 500px;
+            height: 350px;
+            max-height: 400px;
         }
-
-        /* Animations */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
+        .nav-link {
+            transition: all 0.3s ease;
+            position: relative;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #0f766e;
+            transition: width 0.3s;
         }
-        
-        .card-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .active-project {
+            border-left: 4px solid #0f766e;
+            background-color: #f0fdfa;
         }
     </style>
-    <!-- Chosen Palette: Warm Neutrals & Earth Tones (Stone background, Burnt Orange accents, Charcoal text) -->
-    <!-- Application Structure Plan: The app is designed as a "Discourse Classification Laboratory". It moves from the abstract (Definitions) to the concrete (Examples) and then to the analytical (Data Dimensions). 
-         1. Introduction: Sets the stage regarding the complexity of classifying text.
-         2. The Text Type Framework (Werlich): Uses an interactive card system to explore the 5 fundamental cognitive modes.
-         3. Multi-Dimensional Analysis (Biber): Uses a Radar Chart to visualize how different genres score on linguistic dimensions (narrative, involved, etc.). This allows users to "see" the difference between speech and writing.
-         4. Register Theory (Halliday): A functional dashboard to manipulate Field, Tenor, and Mode.
-         5. Genre Hybridity: A concluding section on how types mix.
-         This structure helps the user build a mental model: Start with basic blocks (Types) -> Measure them (Dimensions) -> Apply context (Register). -->
-    <!-- Visualization & Content Choices: 
-         1. Werlich's Types -> Interactive Cards -> To allow users to focus on one definition at a time without overwhelming text.
-         2. Biber's Dimensions -> Radar Chart (Chart.js) -> Chosen because Biber's analysis is multi-factorial. A radar chart perfectly illustrates the "shape" of a text type across multiple axes.
-         3. Register Analysis -> Dynamic Text Injection -> Users click buttons to change context variables, immediately seeing the definition update.
-         4. Genre Mix -> Donut Chart -> To visualize that most real-world texts (like an advertorial) are a percentage mix of different pure types.
-         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Application Structure Plan: 
+         1. Header/Nav: Quick access to sections.
+         2. Hero (Vision): High-level intro from SoP (CS + Biology intersection).
+         3. Bio & Philosophy: Narrative from SoP about the pandemic and clinical context.
+         4. Skills Nexus (Viz): Radar chart showing the balance of R, Python, and Clinical knowledge.
+         5. Research Hub (Interactive): Toggles between the two main research experiences. Updates text and charts dynamically.
+         6. Certifications (Timeline): Vertical list of courses.
+         7. Footer/Contact.
+    -->
+    
+    <!-- CONFIRMATION: NO SVG graphics used directly (using FontAwesome fonts). NO Mermaid JS used. -->
 </head>
-<body class="bg-stone-50 text-stone-800 font-sans antialiased selection:bg-orange-200 selection:text-orange-900">
+<body class="antialiased selection:bg-teal-100 selection:text-teal-900">
 
-    <!-- Navigation / Header -->
-    <header class="bg-white border-b border-stone-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-[#fdfbf7]/90 backdrop-blur-sm border-b border-gray-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <span class="text-2xl font-bold tracking-tight text-stone-900">Discourse<span class="text-orange-600">Lab | Mo7tafa.dev</span></span>
-                    <span class="ml-3 px-2 py-1 text-xs font-semibold bg-stone-100 text-stone-600 rounded border border-stone-200 hidden sm:inline-block">Chapter 4 Summary</span>
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="text-xl font-bold serif-font text-teal-800">M. Tamiminezhad</span>
                 </div>
-                <nav class="hidden md:flex space-x-8">
-                    <button onclick="scrollToSection('intro')" class="text-stone-500 hover:text-orange-600 font-medium transition-colors">Introduction</button>
-                    <button onclick="scrollToSection('types')" class="text-stone-500 hover:text-orange-600 font-medium transition-colors">Werlich's Types</button>
-                    <button onclick="scrollToSection('dimensions')" class="text-stone-500 hover:text-orange-600 font-medium transition-colors">Biber's Dimensions</button>
-                    <button onclick="scrollToSection('register')" class="text-stone-500 hover:text-orange-600 font-medium transition-colors">Register</button>
-                </nav>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#hero" class="nav-link text-gray-600 hover:text-teal-700 font-medium">Vision</a>
+                    <a href="#about" class="nav-link text-gray-600 hover:text-teal-700 font-medium">About</a>
+                    <a href="#skills" class="nav-link text-gray-600 hover:text-teal-700 font-medium">Competencies</a>
+                    <a href="#research" class="nav-link text-gray-600 hover:text-teal-700 font-medium">Research</a>
+                    <a href="#contact" class="px-4 py-2 rounded-md bg-teal-700 text-white hover:bg-teal-800 transition-colors">Contact</a>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-teal-700 focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
             </div>
         </div>
-    </header>
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#hero" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-teal-50">Vision</a>
+                <a href="#about" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-teal-50">About</a>
+                <a href="#research" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-teal-50">Research</a>
+                <a href="#contact" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-teal-50">Contact</a>
+            </div>
+        </div>
+    </nav>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-20">
-
-        <!-- Section 1: Introduction & The Core Problem -->
-        <section id="intro" class="fade-in">
-            <div class="text-center max-w-3xl mx-auto mb-12">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-stone-900 mb-6 tracking-tight">Classifying Discourse</h1>
-                <p class="text-xl text-stone-600 leading-relaxed">
-                    How do we distinguish a recipe from a sermon, or a chat from a lecture? Chapter 4 explores the taxonomy of discourse. It moves beyond simple labels to analyze the underlying <strong>cognitive processes</strong> (Text Types) and <strong>social purposes</strong> (Genres).
+    <!-- SECTION 1: HERO & VISION -->
+    <section id="hero" class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto min-h-[80vh] flex flex-col justify-center">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="space-y-6 animate-fade-in-up">
+                <div class="inline-block px-3 py-1 bg-teal-100 text-teal-800 text-sm font-semibold rounded-full mb-2">
+                    Bioinformatics & AI Researcher
+                </div>
+                <h1 class="text-4xl md:text-6xl font-bold text-gray-900 leading-tight">
+                    Bridging <span class="text-teal-700 italic">Computer Science</span> <br> and <span class="text-amber-600 italic">Biology</span>.
+                </h1>
+                <p class="text-lg text-gray-600 max-w-xl leading-relaxed">
+                    Dedicated to solving complex healthcare problems through robust, multi-modal systems. My goal is to advance computational medicine for disease diagnosis and prognosis.
                 </p>
+                <div class="flex flex-wrap gap-4 pt-4">
+                    <a href="#research" class="px-6 py-3 bg-teal-700 text-white font-medium rounded-lg shadow-lg hover:bg-teal-800 transition-transform transform hover:-translate-y-1">
+                        View Research
+                    </a>
+                    <a href="https://github.com/M7tnj" target="_blank" class="px-6 py-3 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg shadow-sm hover:bg-gray-50 transition-colors">
+                        <i class="fab fa-github mr-2"></i>GitHub
+                    </a>
+                    <a href="https://linkedin.com/in/mostafa-tamiminezhad" target="_blank" class="px-6 py-3 bg-[#0077b5] border border-transparent text-white font-medium rounded-lg shadow-sm hover:bg-[#006396] transition-colors">
+                        <i class="fab fa-linkedin mr-2"></i>LinkedIn
+                    </a>
+                </div>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-white rounded-2xl shadow-sm border border-stone-200 p-8">
-                <div>
-                    <h2 class="text-2xl font-bold text-stone-800 mb-4">Genre vs. Text Type</h2>
-                    <p class="text-stone-600 mb-4">
-                        One of the most critical distinctions in Chapter 4 is between <em>Genre</em> and <em>Text Type</em>. They are often used interchangeably, but Renkema argues for a strict separation based on criteria.
-                    </p>
-                    <ul class="space-y-4">
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-orange-100 text-orange-600 font-bold mt-1">G</span>
-                            <div class="ml-4">
-                                <p class="font-bold text-stone-900">Genre (The "Why")</p>
-                                <p class="text-sm text-stone-500">Classified by social purpose and culture. Examples: <em>Novel, Abstract, Recipe, Sermon.</em></p>
-                            </div>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-stone-200 text-stone-700 font-bold mt-1">T</span>
-                            <div class="ml-4">
-                                <p class="font-bold text-stone-900">Text Type (The "How")</p>
-                                <p class="text-sm text-stone-500">Classified by linguistic structure and cognitive mode. Examples: <em>Narrative, Argumentative, Descriptive.</em></p>
-                            </div>
-                        </li>
-                    </ul>
+            <!-- Contextual Graphic -->
+            <div class="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-teal-500 to-amber-500"></div>
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-bold text-gray-800">Core Focus Areas</h3>
+                    <i class="fas fa-dna text-teal-200 text-4xl"></i>
                 </div>
-                <div class="bg-stone-50 p-6 rounded-xl border border-stone-100 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-orange-100 rounded-full opacity-50"></div>
-                    <h3 class="text-lg font-semibold text-stone-800 mb-3 z-10 relative">Analogy: Architecture</h3>
-                    <p class="text-stone-600 italic mb-4 relative z-10">
-                        "A <strong>Genre</strong> is like the building's function (School, Hospital, Home). A <strong>Text Type</strong> is the building material (Brick, Glass, Concrete)."
+                <!-- Chart Container -->
+                <div class="chart-container h-64">
+                    <canvas id="heroChart"></canvas>
+                </div>
+                <p class="text-sm text-gray-500 mt-4 text-center italic">
+                    Integration of clinical data with computational logic.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: ABOUT & PHILOSOPHY -->
+    <section id="about" class="py-20 bg-white border-t border-gray-100">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">The Journey</h2>
+                <div class="w-24 h-1 bg-amber-500 mx-auto rounded"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
+                <!-- Text Narrative -->
+                <div class="md:col-span-7 space-y-6 text-gray-700 leading-relaxed">
+                    <p class="text-xl font-serif text-teal-800">
+                        "What is the lasting impact of my work?"
                     </p>
-                    <div class="mt-4 p-4 bg-white rounded border-l-4 border-orange-500 shadow-sm">
-                        <p class="text-sm font-medium text-stone-800">Key Takeaway:</p>
-                        <p class="text-sm text-stone-500">A single Genre (e.g., a News Article) can contain multiple Text Types (Narrative paragraphs + Descriptive paragraphs).</p>
+                    <p>
+                        This question led me to the intersection of Computer Science and Biology. While I initially viewed these fields as distinct paths, the Corona Pandemic became a time of self-discovery. Through thousands of hours of dedicated study, I connected the dots and discovered the key: <strong>Bioinformatics</strong>.
+                    </p>
+                    <p>
+                        My education extended far beyond the classroom. While mastering R programming for microarray data, I realized technical skill alone was insufficient without understanding the clinical logic. I pushed myself into the clinical world of cancer and oncology, participating in tumor board examinations and earning CME credits to bridge the gap between code and cure.
+                    </p>
+                    <div class="grid grid-cols-2 gap-4 pt-4">
+                        <div class="p-4 bg-teal-50 rounded-lg border-l-4 border-teal-600">
+                            <div class="text-2xl font-bold text-teal-800">2024</div>
+                            <div class="text-sm text-teal-600">B.Sc. Biotechnology</div>
+                        </div>
+                        <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-600">
+                            <div class="text-2xl font-bold text-amber-800">32</div>
+                            <div class="text-sm text-amber-600">DEGs Identified</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills Chart -->
+                <div class="md:col-span-5">
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-inner h-full">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4 text-center">Competency Matrix</h3>
+                        <div class="chart-container">
+                            <canvas id="skillsChart"></canvas>
+                        </div>
+                        <div class="mt-4 text-xs text-center text-gray-500">
+                            Comparing proficiency in technical vs. domain-specific areas.
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Section 2: Werlich's 5 Text Types -->
-        <section id="types" class="fade-in">
-            <div class="mb-8">
-                <h2 class="text-3xl font-bold text-stone-900 mb-3">Werlich's 5 Text Types</h2>
-                <p class="text-lg text-stone-600 max-w-4xl">
-                    Egon Werlich proposed a highly influential typology based on <strong>cognitive processes</strong> of the human mind. Explore the 5 types below to see how our brain's focus shapes the text we produce.
+    <!-- SECTION 3: RESEARCH & PROJECTS (INTERACTIVE) -->
+    <section id="research" class="py-20 bg-[#fdfbf7]">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Research & Experience</h2>
+                <p class="text-gray-600 max-w-2xl">
+                    Explore my key projects. Click on a project title to see the details, methodologies, and outcomes visualized.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Navigation List -->
-                <div class="space-y-3 lg:col-span-1">
-                    <button onclick="updateWerlich('descriptive')" id="btn-descriptive" class="werlich-btn w-full text-left px-6 py-4 rounded-xl bg-white border border-stone-200 shadow-sm hover:shadow-md transition-all flex items-center justify-between group active-type">
-                        <span class="font-bold text-stone-700 group-hover:text-orange-600">1. Descriptive</span>
-                        <span class="text-stone-400 group-hover:text-orange-500">👁️</span>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Sidebar / Selector -->
+                <div class="lg:col-span-4 space-y-4">
+                    <!-- Project 1 Button -->
+                    <button onclick="updateProject('pathology')" id="btn-pathology" class="w-full text-left p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-all active-project border border-gray-100 group">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-teal-600 uppercase tracking-wider">Current Research</span>
+                            <i class="fas fa-microscope text-gray-400 group-hover:text-teal-600 transition-colors"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-teal-800">AI in Digital Pathology</h3>
+                        <p class="text-sm text-gray-500 mt-2">Systematic review of H&E slide analysis.</p>
                     </button>
-                    <button onclick="updateWerlich('narrative')" id="btn-narrative" class="werlich-btn w-full text-left px-6 py-4 rounded-xl bg-white border border-stone-200 shadow-sm hover:shadow-md transition-all flex items-center justify-between group">
-                        <span class="font-bold text-stone-700 group-hover:text-orange-600">2. Narrative</span>
-                        <span class="text-stone-400 group-hover:text-orange-500">⏱️</span>
-                    </button>
-                    <button onclick="updateWerlich('expository')" id="btn-expository" class="werlich-btn w-full text-left px-6 py-4 rounded-xl bg-white border border-stone-200 shadow-sm hover:shadow-md transition-all flex items-center justify-between group">
-                        <span class="font-bold text-stone-700 group-hover:text-orange-600">3. Expository</span>
-                        <span class="text-stone-400 group-hover:text-orange-500">🧠</span>
-                    </button>
-                    <button onclick="updateWerlich('argumentative')" id="btn-argumentative" class="werlich-btn w-full text-left px-6 py-4 rounded-xl bg-white border border-stone-200 shadow-sm hover:shadow-md transition-all flex items-center justify-between group">
-                        <span class="font-bold text-stone-700 group-hover:text-orange-600">4. Argumentative</span>
-                        <span class="text-stone-400 group-hover:text-orange-500">⚖️</span>
-                    </button>
-                    <button onclick="updateWerlich('instructive')" id="btn-instructive" class="werlich-btn w-full text-left px-6 py-4 rounded-xl bg-white border border-stone-200 shadow-sm hover:shadow-md transition-all flex items-center justify-between group">
-                        <span class="font-bold text-stone-700 group-hover:text-orange-600">5. Instructive</span>
-                        <span class="text-stone-400 group-hover:text-orange-500">👉</span>
+
+                    <!-- Project 2 Button -->
+                    <button onclick="updateProject('breastcancer')" id="btn-breastcancer" class="w-full text-left p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-all border border-gray-100 group">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-amber-600 uppercase tracking-wider">Undergraduate Thesis</span>
+                            <i class="fas fa-chart-bar text-gray-400 group-hover:text-amber-600 transition-colors"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-amber-800">HER2+ Breast Cancer Analysis</h3>
+                        <p class="text-sm text-gray-500 mt-2">Differential gene expression with R.</p>
                     </button>
                 </div>
 
-                <!-- Display Panel -->
-                <div class="lg:col-span-2 bg-white rounded-2xl border border-stone-200 shadow-lg p-8 flex flex-col justify-between h-full relative overflow-hidden transition-all duration-300" id="werlich-panel">
-                    <div class="absolute top-0 right-0 p-4 opacity-10 text-9xl font-black text-stone-900 pointer-events-none" id="werlich-icon">👁️</div>
-                    
-                    <div>
-                        <div class="flex items-center space-x-3 mb-2">
-                            <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-bold uppercase tracking-wide">Focus</span>
-                            <span class="text-stone-400 text-sm font-medium" id="werlich-focus">Phenomenal (Space)</span>
-                        </div>
-                        <h3 class="text-3xl font-bold text-stone-900 mb-6" id="werlich-title">Descriptive Type</h3>
+                <!-- Content Area -->
+                <div class="lg:col-span-8">
+                    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 h-full flex flex-col">
                         
-                        <div class="prose prose-stone mb-6">
-                            <p class="text-lg text-stone-600" id="werlich-desc">
-                                Focuses on factual phenomena in a spatial context. It deals with the perception of space and the arrangement of objects or people within it.
-                            </p>
+                        <!-- Dynamic Header -->
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-6 pb-6 border-b border-gray-100">
+                            <div>
+                                <h3 id="project-title" class="text-2xl font-bold text-gray-900">AI in Digital Pathology</h3>
+                                <div id="project-role" class="text-teal-700 font-medium mt-1">Postgraduate Researcher</div>
+                            </div>
+                            <div id="project-date" class="mt-2 md:mt-0 px-3 py-1 bg-gray-100 text-gray-600 rounded text-sm font-mono">
+                                2024 - Present
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Body -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 flex-grow">
+                            <div class="space-y-4">
+                                <div>
+                                    <h4 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Objective</h4>
+                                    <p id="project-desc" class="text-gray-700 leading-relaxed">
+                                        Conducting a systematic review of literature across multiple databases to examine emerging trends in the application of artificial intelligence (AI) for digital pathology and disease diagnosis using hematoxylin and eosin (H&E) slide images.
+                                    </p>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Key Technologies</h4>
+                                    <div id="project-tech" class="flex flex-wrap gap-2">
+                                        <span class="px-3 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">Systematic Review</span>
+                                        <span class="px-3 py-1 bg-green-50 text-green-700 text-xs rounded-full">Deep Learning</span>
+                                        <span class="px-3 py-1 bg-purple-50 text-purple-700 text-xs rounded-full">H&E Staining</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Dynamic Chart Area -->
+                            <div class="flex flex-col">
+                                <h4 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2 text-center">Data Visualization</h4>
+                                <div class="bg-gray-50 rounded-xl p-4 flex-grow flex items-center justify-center border border-gray-100">
+                                    <div class="chart-container" style="height: 250px;">
+                                        <canvas id="projectChart"></canvas>
+                                    </div>
+                                </div>
+                                <p id="chart-caption" class="text-xs text-center text-gray-400 mt-2">
+                                    Distribution of AI methodologies in pathology literature.
+                                </p>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="bg-stone-50 rounded-xl p-5 border-l-4 border-orange-500">
-                        <h4 class="text-sm font-bold text-stone-400 uppercase mb-2">Linguistic Markers</h4>
-                        <p class="text-stone-700 italic font-serif" id="werlich-markers">
-                            Locative adverbs (left, right, above), existential verbs (be, exist), state adjectives.
-                        </p>
-                    </div>
                 </div>
             </div>
-        </section>
-
-        <!-- Section 3: Biber's Multi-Dimensional Analysis -->
-        <section id="dimensions" class="bg-stone-900 rounded-3xl p-8 md:p-12 text-white fade-in shadow-2xl">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div>
-                    <div class="flex items-center space-x-2 mb-4">
-                        <span class="h-3 w-3 bg-blue-400 rounded-full"></span>
-                        <span class="text-blue-200 text-sm font-semibold tracking-wider uppercase">Quantitative Linguistics</span>
-                    </div>
-                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Biber's Multi-Dimensional Analysis</h2>
-                    <p class="text-stone-300 mb-6 leading-relaxed">
-                        Douglas Biber proved that we cannot just split texts into "Speech" vs "Writing." Instead, texts vary across multiple linguistic dimensions simultaneously.
-                    </p>
-                    <p class="text-stone-400 text-sm mb-8">
-                        The chart maps how two different genres score on Biber's dimensions. Notice how "Conversation" is highly involved but non-abstract, whereas "Academic Prose" is the opposite.
-                    </p>
-                    
-                    <!-- Controls -->
-                    <div class="bg-stone-800 p-6 rounded-xl border border-stone-700">
-                        <h4 class="text-white font-bold mb-4">Compare Genres:</h4>
-                        <div class="flex flex-wrap gap-3">
-                            <button onclick="updateChartData('convo_academic')" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded text-sm font-medium transition-colors text-white">Conversation vs. Academic</button>
-                            <button onclick="updateChartData('fiction_news')" class="px-4 py-2 bg-stone-700 hover:bg-stone-600 rounded text-sm font-medium transition-colors text-stone-200">Fiction vs. News</button>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-stone-700">
-                             <p class="text-xs text-stone-500 mt-2">
-                                <strong class="text-stone-300">Dimension 1 (Involved):</strong> Private verbs, contractions, 1st person pronouns.<br>
-                                <strong class="text-stone-300">Dimension 2 (Narrative):</strong> Past tense, 3rd person pronouns.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Radar Chart Container -->
-                <div class="bg-stone-800 rounded-2xl p-4 border border-stone-700 shadow-inner flex flex-col justify-center items-center">
-                    <div class="chart-container">
-                        <canvas id="biberChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 4: Register (Halliday) -->
-        <section id="register" class="fade-in">
-             <div class="mb-10 text-center">
-                <h2 class="text-3xl font-bold text-stone-900 mb-3">Register & Situation</h2>
-                <p class="text-lg text-stone-600 max-w-2xl mx-auto">
-                    According to Halliday's Systemic Functional Linguistics, the type of language we use (Register) is determined by three variables of the context of situation. Adjust the variables below to see how they shape discourse.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Field Card -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 card-hover">
-                    <div class="h-12 w-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center text-2xl mb-4">🌍</div>
-                    <h3 class="text-xl font-bold text-stone-800 mb-2">Field</h3>
-                    <p class="text-sm text-stone-500 mb-4 h-10">What is happening? The topic and nature of the activity.</p>
-                    <select id="select-field" onchange="updateRegister()" class="w-full p-2 bg-stone-50 border border-stone-200 rounded text-stone-700 focus:outline-none focus:ring-2 focus:ring-green-500">
-                        <option value="science">Scientific Research</option>
-                        <option value="cooking">Cooking Dinner</option>
-                        <option value="politics">Political Debate</option>
-                    </select>
-                </div>
-
-                <!-- Tenor Card -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 card-hover">
-                    <div class="h-12 w-12 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center text-2xl mb-4">👥</div>
-                    <h3 class="text-xl font-bold text-stone-800 mb-2">Tenor</h3>
-                    <p class="text-sm text-stone-500 mb-4 h-10">Who is taking part? The relationship between participants.</p>
-                    <select id="select-tenor" onchange="updateRegister()" class="w-full p-2 bg-stone-50 border border-stone-200 rounded text-stone-700 focus:outline-none focus:ring-2 focus:ring-purple-500">
-                        <option value="expert">Expert to Novice</option>
-                        <option value="friend">Friend to Friend</option>
-                        <option value="formal">Official to Public</option>
-                    </select>
-                </div>
-
-                <!-- Mode Card -->
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-stone-200 card-hover">
-                    <div class="h-12 w-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-2xl mb-4">📡</div>
-                    <h3 class="text-xl font-bold text-stone-800 mb-2">Mode</h3>
-                    <p class="text-sm text-stone-500 mb-4 h-10">What role is language playing? The channel (written/spoken).</p>
-                    <select id="select-mode" onchange="updateRegister()" class="w-full p-2 bg-stone-50 border border-stone-200 rounded text-stone-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="written">Written/Reflected</option>
-                        <option value="spoken">Spoken/Spontaneous</option>
-                        <option value="digital">Digital/Instant</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Dynamic Result Box -->
-            <div class="mt-8 bg-stone-800 rounded-2xl p-8 text-center text-white shadow-xl transition-all" id="register-result">
-                <p class="text-stone-400 uppercase tracking-widest text-xs font-bold mb-4">Predicted Text Output</p>
-                <div id="register-output" class="text-xl md:text-2xl font-serif italic leading-relaxed">
-                    "Select options above to generate a text sample."
-                </div>
-                <div class="mt-6 flex justify-center space-x-2">
-                    <span id="tag-field" class="px-3 py-1 bg-stone-700 rounded-full text-xs text-stone-300">Topic</span>
-                    <span id="tag-tenor" class="px-3 py-1 bg-stone-700 rounded-full text-xs text-stone-300">Relation</span>
-                    <span id="tag-mode" class="px-3 py-1 bg-stone-700 rounded-full text-xs text-stone-300">Channel</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 5: Hybridity Visualization -->
-        <section class="fade-in">
-             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-white rounded-3xl p-8 border border-stone-200 shadow-sm">
-                <div>
-                    <h2 class="text-2xl font-bold text-stone-900 mb-4">Textual Hybridity</h2>
-                    <p class="text-stone-600 mb-6">
-                        Pure text types rarely exist in isolation. Most discourses are <strong>Hybrids</strong>. This chart shows the composition of an "Advertorial" (Advertisement + Editorial).
-                    </p>
-                    <ul class="space-y-2 text-sm text-stone-600">
-                        <li class="flex items-center"><span class="w-3 h-3 rounded-full bg-orange-500 mr-2"></span> <strong>Argumentative (40%):</strong> Persuading to buy.</li>
-                        <li class="flex items-center"><span class="w-3 h-3 rounded-full bg-blue-500 mr-2"></span> <strong>Expository (30%):</strong> Explaining the product features.</li>
-                        <li class="flex items-center"><span class="w-3 h-3 rounded-full bg-green-500 mr-2"></span> <strong>Descriptive (20%):</strong> Describing the look/feel.</li>
-                        <li class="flex items-center"><span class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></span> <strong>Narrative (10%):</strong> User testimonials/stories.</li>
-                    </ul>
-                </div>
-                <div class="flex justify-center">
-                    <div class="chart-container" style="height: 300px; max-width: 300px;">
-                        <canvas id="hybridChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="bg-stone-900 text-stone-400 py-12 mt-20">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="font-bold text-white mb-2">Introduction to Discourse Studies</p>
-            <p class="text-sm">Based on Chapter 4: Discourse Types</p>
-            <p class="text-xs mt-8 text-stone-600">Interactive Summary Generated for Educational Purposes by Mostafa Tamiminezhad.</p>
         </div>
-    </footer>
+    </section>
 
+    <!-- SECTION 4: CERTIFICATIONS & EDUCATION -->
+    <section class="py-20 bg-white border-t border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-gray-900 mb-12 text-center">Education & Certifications</h2>
+            
+            <div class="relative border-l-2 border-teal-200 ml-4 md:ml-0 space-y-12">
+                
+                <!-- Education Item -->
+                <div class="relative pl-8 md:pl-12">
+                    <div class="absolute -left-[9px] top-0 w-5 h-5 bg-teal-600 rounded-full border-4 border-white shadow-sm"></div>
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
+                        <h3 class="text-xl font-bold text-gray-900">B.Sc. in Biotechnology</h3>
+                        <span class="text-sm text-gray-500 font-mono">2024</span>
+                    </div>
+                    <p class="text-teal-700 font-medium">Zand Institute of Higher Education</p>
+                    <p class="text-gray-600 mt-2">Shiraz, Fars, Iran</p>
+                </div>
+
+                <!-- Cert Item 1 -->
+                <div class="relative pl-8 md:pl-12">
+                    <div class="absolute -left-[9px] top-0 w-5 h-5 bg-amber-400 rounded-full border-4 border-white shadow-sm"></div>
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
+                        <h3 class="text-lg font-bold text-gray-800">CS50 Programming with R and Python</h3>
+                        <span class="text-sm text-gray-500 font-mono">2025</span>
+                    </div>
+                    <p class="text-gray-600">Harvard University</p>
+                </div>
+
+                <!-- Cert Item 2 -->
+                <div class="relative pl-8 md:pl-12">
+                    <div class="absolute -left-[9px] top-0 w-5 h-5 bg-gray-400 rounded-full border-4 border-white shadow-sm"></div>
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
+                        <h3 class="text-lg font-bold text-gray-800">Biomedical Image Analysis in Python</h3>
+                        <span class="text-sm text-gray-500 font-mono">2024</span>
+                    </div>
+                    <p class="text-gray-600">Data Camp</p>
+                </div>
+
+                 <!-- Cert Item 3 -->
+                 <div class="relative pl-8 md:pl-12">
+                    <div class="absolute -left-[9px] top-0 w-5 h-5 bg-gray-400 rounded-full border-4 border-white shadow-sm"></div>
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
+                        <h3 class="text-lg font-bold text-gray-800">RNA-Seq and ChIP-seq Analysis in R</h3>
+                        <span class="text-sm text-gray-500 font-mono">2023</span>
+                    </div>
+                    <p class="text-gray-600">Data Camp</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER / CONTACT -->
+    <section id="contact" class="bg-gray-900 text-white py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold serif-font mb-6">Let's Connect</h2>
+            <p class="text-gray-400 max-w-xl mx-auto mb-10">
+                I am eager to contribute my skills to robust, multi-modal systems for disease diagnosis.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div class="p-6 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-envelope text-2xl text-teal-400 mb-4"></i>
+                    <h3 class="font-bold mb-2">Email</h3>
+                    <a href="mailto:tamiminezhad.m@yahoo.com" class="text-gray-300 hover:text-white">tamiminezhad.m@yahoo.com</a>
+                </div>
+                <div class="p-6 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-phone text-2xl text-teal-400 mb-4"></i>
+                    <h3 class="font-bold mb-2">Phone</h3>
+                    <p class="text-gray-300">+98 939 899 1947</p>
+                </div>
+                <div class="p-6 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-map-marker-alt text-2xl text-teal-400 mb-4"></i>
+                    <h3 class="font-bold mb-2">Location</h3>
+                    <p class="text-gray-300">Shiraz, Fars Province, Iran</p>
+                </div>
+            </div>
+
+            <div class="flex justify-center space-x-6">
+                <a href="https://github.com/M7tnj" class="text-gray-400 hover:text-white transition-colors text-2xl"><i class="fab fa-github"></i></a>
+                <a href="https://linkedin.com/in/mostafa-tamiminezhad" class="text-gray-400 hover:text-white transition-colors text-2xl"><i class="fab fa-linkedin"></i></a>
+                <a href="https://kaggle.com/mostafatamiminezhad" class="text-gray-400 hover:text-white transition-colors text-2xl"><i class="fab fa-kaggle"></i></a>
+            </div>
+            
+            <div class="mt-12 text-gray-600 text-sm">
+                &copy; 2024 Mostafa Tamiminezhad. All rights reserved.
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript Logic -->
     <script>
-        // --- DATA & STATE MANAGEMENT ---
-
-        // 1. Werlich's Text Types Data
-        const werlichData = {
-            descriptive: {
-                title: "Descriptive Type",
-                focus: "Phenomenal (Space)",
-                icon: "👁️",
-                desc: "Focuses on factual phenomena in a spatial context. It deals with the perception of space and the arrangement of objects, people, or atmosphere within it.",
-                markers: "Locative adverbs (left, right, above), existential verbs (be, exist), state adjectives."
-            },
-            narrative: {
-                title: "Narrative Type",
-                focus: "Temporal (Time)",
-                icon: "⏱️",
-                desc: "Focuses on factual or conceptual phenomena in time. It deals with the sequencing of events and actions.",
-                markers: "Action verbs, temporal adverbs (then, after, suddenly), past tense."
-            },
-            expository: {
-                title: "Expository Type",
-                focus: "Comprehension (Analysis)",
-                icon: "🧠",
-                desc: "Focuses on analyzing concepts or deconstructing constituent elements. It explains 'how' or 'why' something is the way it is (definitions, explications).",
-                markers: "State verbs, causal connectors (because, since), general nouns."
-            },
-            argumentative: {
-                title: "Argumentative Type",
-                focus: "Judging (Evaluation)",
-                icon: "⚖️",
-                desc: "Focuses on the relations between concepts to advocate a position. It proposes relations between concepts through evaluation.",
-                markers: "Evaluative adjectives, modal verbs (must, should), concessive connectors (however, although)."
-            },
-            instructive: {
-                title: "Instructive Type",
-                focus: "Planning (Future Action)",
-                icon: "👉",
-                desc: "Focuses on future behavior. It tells the receiver what to do.",
-                markers: "Imperatives, modal auxiliaries, linear enumeration (first, second)."
-            }
-        };
-
-        // 2. Biber's Dimensions Data
-        // D1: Involved vs Informational | D2: Narrative vs Non-Narrative | D3: Explicit vs Situation-Dependent
-        const biberDataSets = {
-            convo_academic: {
-                labels: ['Involvedness', 'Narrative', 'Elaborated Ref.', 'Overt Persuasion', 'Abstractness'],
-                datasets: [
-                    {
-                        label: 'Conversation',
-                        data: [35, 15, -5, 5, -10],
-                        fill: true,
-                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                        borderColor: 'rgb(59, 130, 246)',
-                        pointBackgroundColor: 'rgb(59, 130, 246)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgb(59, 130, 246)'
-                    },
-                    {
-                        label: 'Academic Prose',
-                        data: [-15, -5, 15, 0, 25],
-                        fill: true,
-                        backgroundColor: 'rgba(234, 88, 12, 0.2)',
-                        borderColor: 'rgb(234, 88, 12)',
-                        pointBackgroundColor: 'rgb(234, 88, 12)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgb(234, 88, 12)'
-                    }
-                ]
-            },
-            fiction_news: {
-                labels: ['Involvedness', 'Narrative', 'Elaborated Ref.', 'Overt Persuasion', 'Abstractness'],
-                datasets: [
-                    {
-                        label: 'Fiction',
-                        data: [10, 30, -2, 2, -5],
-                        fill: true,
-                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
-                        borderColor: 'rgb(16, 185, 129)',
-                        pointBackgroundColor: 'rgb(16, 185, 129)',
-                        pointBorderColor: '#fff'
-                    },
-                    {
-                        label: 'Official Documents',
-                        data: [-10, -10, 10, 5, 15],
-                        fill: true,
-                        backgroundColor: 'rgba(99, 102, 241, 0.2)',
-                        borderColor: 'rgb(99, 102, 241)',
-                        pointBackgroundColor: 'rgb(99, 102, 241)',
-                        pointBorderColor: '#fff'
-                    }
-                ]
-            }
-        };
-
-        // --- FUNCTIONS ---
-
-        // Navigation
-        function scrollToSection(id) {
-            const element = document.getElementById(id);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-
-        // Werlich Type Updater
-        function updateWerlich(type) {
-            // Update UI State
-            document.querySelectorAll('.werlich-btn').forEach(btn => {
-                btn.classList.remove('border-orange-500', 'bg-orange-50');
-                btn.classList.add('bg-white', 'border-stone-200');
-            });
-            const activeBtn = document.getElementById(`btn-${type}`);
-            activeBtn.classList.remove('bg-white', 'border-stone-200');
-            activeBtn.classList.add('border-orange-500', 'bg-orange-50');
-
-            // Update Content
-            const data = werlichData[type];
-            const panel = document.getElementById('werlich-panel');
-            
-            // Simple fade effect
-            panel.style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('werlich-title').innerText = data.title;
-                document.getElementById('werlich-focus').innerText = data.focus;
-                document.getElementById('werlich-desc').innerText = data.desc;
-                document.getElementById('werlich-markers').innerText = data.markers;
-                document.getElementById('werlich-icon').innerText = data.icon;
-                panel.style.opacity = '1';
-            }, 200);
-        }
-
-        // Register Logic
-        function updateRegister() {
-            const f = document.getElementById('select-field').value;
-            const t = document.getElementById('select-tenor').value;
-            const m = document.getElementById('select-mode').value;
-            const output = document.getElementById('register-output');
-
-            // Logic Matrix (Simplified for demo purposes)
-            let text = "";
-            
-            // Science
-            if (f === 'science') {
-                if (t === 'expert' && m === 'written') text = "The empirical data suggests a correlation between variable X and Y (p < 0.05). Future studies should address...";
-                else if (t === 'friend' && m === 'spoken') text = "So, I ran the numbers and honestly, it looks like they're connected, which is super cool.";
-                else text = "Research indicates that these elements are linked.";
-            }
-            // Cooking
-            else if (f === 'cooking') {
-                if (m === 'written' && t === 'expert') text = "Preheat oven to 200°C. Julienne the carrots precisely. Reduction of the sauce is critical.";
-                else if (m === 'spoken' && t === 'friend') text = "Dude, just throw the carrots in. Make sure the oven is hot enough!";
-                else text = "Cook the carrots in the oven until done.";
-            }
-            // Politics
-            else {
-                if (t === 'formal' && m === 'spoken') text = "My fellow citizens, we stand today at a crossroads of history requiring decisive action.";
-                else if (m === 'digital') text = "Vote NO on Prop 5! #Election2025 #Vote";
-                else text = "The political situation requires attention.";
-            }
-
-            output.innerText = `"${text}"`;
-            
-            document.getElementById('tag-field').innerText = f.toUpperCase();
-            document.getElementById('tag-tenor').innerText = t.toUpperCase();
-            document.getElementById('tag-mode').innerText = m.toUpperCase();
-        }
-
-        // --- CHART INITIALIZATION ---
-
-        let radarChartInstance = null;
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // 1. Initialize Werlich
-            updateWerlich('descriptive');
-            // 2. Initialize Register
-            updateRegister();
-
-            // 3. Initialize Biber Chart (Radar)
-            const radarCtx = document.getElementById('biberChart').getContext('2d');
-            
-            // Chart Defaults for dark theme
-            Chart.defaults.color = '#a8a29e';
-            Chart.defaults.borderColor = '#44403c';
-
-            radarChartInstance = new Chart(radarCtx, {
-                type: 'radar',
-                data: biberDataSets.convo_academic,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            angleLines: { color: '#57534e' },
-                            grid: { color: '#44403c' },
-                            pointLabels: {
-                                color: '#e7e5e4',
-                                font: { size: 12, weight: 'bold' }
-                            },
-                            ticks: { display: false, backdropColor: 'transparent' }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            labels: { color: '#fff', font: { size: 14 } }
-                        }
-                    }
-                }
-            });
-
-            // 4. Initialize Hybrid Donut Chart
-            const hybridCtx = document.getElementById('hybridChart').getContext('2d');
-            new Chart(hybridCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Argumentative', 'Expository', 'Descriptive', 'Narrative'],
+        // --- Data Handling ---
+        const projects = {
+            pathology: {
+                title: "AI in Digital Pathology",
+                role: "Postgraduate Researcher",
+                date: "2024 - Present",
+                desc: "Conducting a systematic review of literature across multiple databases to examine emerging trends in the application of artificial intelligence (AI) for digital pathology and disease diagnosis using hematoxylin and eosin (H&E) slide images.",
+                tags: ["Systematic Review", "Deep Learning", "H&E Staining", "Medical Imaging"],
+                chartType: 'doughnut',
+                chartData: {
+                    labels: ['Supervised Learning', 'Weakly Supervised', 'Unsupervised', 'Other'],
                     datasets: [{
-                        data: [40, 30, 20, 10],
-                        backgroundColor: ['#f97316', '#3b82f6', '#22c55e', '#eab308'],
-                        borderWidth: 0
+                        data: [45, 30, 15, 10],
+                        backgroundColor: ['#0f766e', '#0d9488', '#5eead4', '#ccfbf1']
+                    }]
+                },
+                caption: "Trends in AI methodologies found in literature review."
+            },
+            breastcancer: {
+                title: "HER2+ Breast Cancer Analysis",
+                role: "Undergraduate Thesis",
+                date: "2021 - 2023",
+                desc: "Integrated and filtered four microarray profile datasets obtained from GEO (Gene Expression Omnibus) database. Grouped cases into three major clinical categories and conducted differential gene expression analysis with R. Identified 32 shared differential expressed genes (DEGs).",
+                tags: ["R Programming", "Microarray Analysis", "GEO Database", "Oncology"],
+                chartType: 'bar',
+                chartData: {
+                    labels: ['Dataset 1', 'Dataset 2', 'Dataset 3', 'Dataset 4'],
+                    datasets: [{
+                        label: 'Samples Processed',
+                        data: [120, 95, 110, 85],
+                        backgroundColor: '#d97706'
+                    }, {
+                        label: 'DEGs Identified',
+                        data: [28, 35, 30, 32],
+                        backgroundColor: '#1f2937'
+                    }]
+                },
+                caption: "Sample volume vs. relevant genes identified across 4 datasets."
+            }
+        };
+
+        let projectChartInstance = null;
+
+        // --- Chart Initialization Functions ---
+
+        function initHeroChart() {
+            const ctx = document.getElementById('heroChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Model Accuracy',
+                        data: [65, 72, 78, 85, 89, 94],
+                        borderColor: '#0f766e',
+                        backgroundColor: 'rgba(15, 118, 110, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Clinical Validation',
+                        data: [20, 35, 50, 60, 80, 88],
+                        borderColor: '#d97706',
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0.4
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    cutout: '60%',
                     plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                             callbacks: {
-                                label: function(context) {
-                                    return context.label + ': ' + context.raw + '%';
-                                }
-                            }
-                        }
+                        legend: { position: 'bottom' }
+                    },
+                    scales: {
+                        y: { display: false },
+                        x: { display: false }
                     }
                 }
             });
-        });
-
-        // Update Radar Chart Data
-        function updateChartData(key) {
-            const newData = biberDataSets[key];
-            radarChartInstance.data = newData;
-            radarChartInstance.update();
         }
+
+        function initSkillsChart() {
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['R Programming', 'Python', 'Genomic Analysis', 'Clinical Oncology', 'Image Analysis'],
+                    datasets: [{
+                        label: 'Proficiency Level',
+                        data: [90, 85, 80, 75, 70],
+                        backgroundColor: 'rgba(15, 118, 110, 0.2)',
+                        borderColor: '#0f766e',
+                        pointBackgroundColor: '#0f766e',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#0f766e'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e5e7eb' },
+                            grid: { color: '#e5e7eb' },
+                            pointLabels: {
+                                font: { size: 12, family: 'Inter' },
+                                color: '#4b5563'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100,
+                            ticks: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        function updateProject(key) {
+            const data = projects[key];
+            
+            // UI Updates
+            document.querySelectorAll('.active-project').forEach(el => {
+                el.classList.remove('active-project', 'bg-teal-50', 'border-teal-500');
+                el.classList.add('border-gray-100');
+            });
+            
+            const btn = document.getElementById(`btn-${key}`);
+            btn.classList.add('active-project');
+            btn.classList.remove('border-gray-100');
+
+            // Content Updates
+            document.getElementById('project-title').textContent = data.title;
+            document.getElementById('project-role').textContent = data.role;
+            document.getElementById('project-date').textContent = data.date;
+            document.getElementById('project-desc').textContent = data.desc;
+            document.getElementById('chart-caption').textContent = data.caption;
+
+            // Tag Updates
+            const techContainer = document.getElementById('project-tech');
+            techContainer.innerHTML = '';
+            data.tags.forEach((tag, index) => {
+                const colors = [
+                    'bg-blue-50 text-blue-700', 
+                    'bg-green-50 text-green-700', 
+                    'bg-purple-50 text-purple-700',
+                    'bg-amber-50 text-amber-700'
+                ];
+                const span = document.createElement('span');
+                span.className = `px-3 py-1 ${colors[index % colors.length]} text-xs rounded-full animate-fade-in`;
+                span.textContent = tag;
+                techContainer.appendChild(span);
+            });
+
+            // Chart Update
+            if (projectChartInstance) {
+                projectChartInstance.destroy();
+            }
+
+            const ctx = document.getElementById('projectChart').getContext('2d');
+            projectChartInstance = new Chart(ctx, {
+                type: data.chartType,
+                data: data.chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 12 } }
+                    }
+                }
+            });
+        }
+
+        // --- Event Listeners ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initHeroChart();
+            initSkillsChart();
+            updateProject('pathology'); // Load default project
+
+            // Mobile Menu Toggle
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        });
 
     </script>
 </body>
