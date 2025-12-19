@@ -3,579 +3,521 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mostafa Tamiminezhad | Computational Medicine Researcher</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Font Awesome (for icons, replacing SVG) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-
-    <!-- Chosen Palette: Warm Neutrals & Medical Teal -->
-    <!-- 
-        Background: #fdfbf7 (Warm Cream)
-        Text Primary: #1f2937 (Gray 800)
-        Text Secondary: #4b5563 (Gray 600)
-        Accent: #0f766e (Teal 700) - Represents Medicine/Biology
-        Secondary Accent: #d97706 (Amber 600) - Highlights
-    -->
+    <title>Mostafa Tamiminezhad | Computational Oncology & AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        :root {
+            --bg-deep: #050506;
+            --bg-card: #0f0f12;
+            --accent-primary: #bfff00; /* Cyber Lime */
+            --accent-secondary: #00f2ff; /* Electric Cyan */
+            --text-main: #f0f0f3;
+            --text-muted: #8e8e99;
+            --border: rgba(255, 255, 255, 0.08);
+            --glass: rgba(10, 10, 12, 0.7);
+            --glow-lime: rgba(191, 255, 0, 0.15);
+        }
+
+        * { box-sizing: border-box; scroll-behavior: smooth; }
         body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
             font-family: 'Inter', sans-serif;
-            background-color: #fdfbf7;
-            color: #1f2937;
-            scroll-behavior: smooth;
+            margin: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
-        h1, h2, h3, .serif-font {
-            font-family: 'Playfair Display', serif;
+
+        /* --- Custom Scrollbar --- */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-deep); }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-primary); }
+
+        /* --- Typography --- */
+        h1, h2, h3, h4 { font-family: 'Outfit', sans-serif; margin: 0; color: #fff; font-weight: 700; }
+        h2 { font-size: 2.8rem; letter-spacing: -0.03em; margin-bottom: 1rem; }
+        .code-font { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--accent-secondary); }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .chart-container {
-            position: relative;
+
+        /* --- Layout --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        section { padding: 120px 0; position: relative; }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed;
+            top: 0;
             width: 100%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 350px;
-            max-height: 400px;
+            padding: 1.25rem 0;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
         }
-        .nav-link {
-            transition: all 0.3s ease;
+        nav .container { display: flex; justify-content: space-between; align-items: center; }
+        .nav-links { display: flex; gap: 2.5rem; list-style: none; margin: 0; padding: 0; }
+        .nav-links a { 
+            text-decoration: none; 
+            color: var(--text-muted); 
+            font-weight: 500; 
+            transition: 0.3s; 
+            font-size: 0.85rem; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent-primary); }
+
+        /* --- Hero Section --- */
+        #hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            background: 
+                radial-gradient(circle at 70% 30%, var(--glow-lime), transparent 50%),
+                radial-gradient(circle at 20% 70%, rgba(0, 242, 255, 0.05), transparent 40%);
+        }
+        .hero-title { font-size: clamp(3rem, 8vw, 5rem); line-height: 1; margin-bottom: 2rem; }
+        .hero-tagline { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 3rem; max-width: 650px; font-weight: 300; }
+        
+        .btn-group { display: flex; gap: 1rem; }
+        .btn {
+            padding: 1rem 2.2rem;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 0.9rem;
+        }
+        .btn-primary { background: var(--accent-primary); color: #000; border: 1px solid var(--accent-primary); }
+        .btn-secondary { background: transparent; color: #fff; border: 1px solid var(--border); }
+        .btn:hover { transform: translateY(-4px); box-shadow: 0 12px 24px -10px var(--accent-primary); }
+
+        /* --- Interactive Volcano Plot --- */
+        .chart-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 3rem;
             position: relative;
+            overflow: hidden;
         }
-        .nav-link::after {
+        .chart-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; }
+        .volcano-svg { width: 100%; height: 400px; cursor: crosshair; }
+        .gene-dot { transition: r 0.3s, fill 0.3s; cursor: pointer; }
+        .gene-dot:hover { r: 8; fill: #fff !important; filter: drop-shadow(0 0 8px var(--accent-primary)); }
+        
+        #tooltip {
+            position: absolute;
+            background: #1a1a1e;
+            padding: 10px 14px;
+            border-radius: 6px;
+            border: 1px solid var(--accent-secondary);
+            font-size: 0.75rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 100;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        /* --- Skill Cards --- */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3.5rem;
+        }
+        .tech-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            position: relative;
+            transition: 0.4s;
+            overflow: hidden;
+        }
+        .tech-card::before {
             content: '';
             position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -4px;
-            left: 0;
-            background-color: #0f766e;
-            transition: width 0.3s;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-secondary), transparent);
+            transform: translateX(-100%);
+            transition: 0.6s;
         }
-        .nav-link:hover::after {
-            width: 100%;
+        .tech-card:hover { border-color: var(--accent-secondary); transform: translateY(-5px); }
+        .tech-card:hover::before { transform: translateX(100%); }
+        .tech-card i { font-size: 2.2rem; color: var(--accent-primary); margin-bottom: 1.5rem; }
+        
+        /* --- Innovation Section (Multimodal) --- */
+        .innovation-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
         }
-        .active-project {
-            border-left: 4px solid #0f766e;
-            background-color: #f0fdfa;
+        .multi-modal-graphic {
+            position: relative;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
+        .node {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 0.7rem;
+            z-index: 2;
+            transition: 0.3s;
+        }
+        .node:hover { border-color: var(--accent-primary); box-shadow: 0 0 20px var(--glow-lime); }
+        .node-center { width: 150px; height: 150px; border-color: var(--accent-secondary); background: rgba(0, 242, 255, 0.05); }
+        .connector {
+            position: absolute;
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(90deg, var(--accent-secondary), transparent);
+            z-index: 1;
+        }
+
+        /* --- Projects --- */
+        .project-masonry { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; margin-top: 4rem; }
+        .project-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+        .project-item:hover { border-color: var(--accent-primary); }
+        .project-header { height: 180px; background: #000; display: flex; align-items: center; justify-content: center; position: relative; }
+        .project-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(0deg, var(--bg-card), transparent);
+        }
+        .project-body { padding: 1.5rem; }
+
+        /* --- Mobile --- */
+        @media (max-width: 968px) {
+            .innovation-layout { grid-template-columns: 1fr; gap: 2rem; }
+            h2 { font-size: 2.2rem; }
+            .hero-title { font-size: 3.5rem; }
+        }
+
+        /* --- Animations --- */
+        [data-reveal] { opacity: 0; transform: translateY(30px); transition: 0.8s cubic-bezier(0.215, 0.61, 0.355, 1); }
+        [data-reveal].active { opacity: 1; transform: translateY(0); }
     </style>
-
-    <!-- Application Structure Plan: 
-         1. Header/Nav: Quick access to sections.
-         2. Hero (Vision): High-level intro from SoP (CS + Biology intersection).
-         3. Bio & Philosophy: Narrative from SoP about the pandemic and clinical context.
-         4. Skills Nexus (Viz): Radar chart showing the balance of R, Python, and Clinical knowledge.
-         5. Research Hub (Interactive): Toggles between the two main research experiences. Updates text and charts dynamically.
-         6. Certifications (Timeline): Vertical list of courses.
-         7. Footer/Contact.
-    -->
-    
-    <!-- CONFIRMATION: NO SVG graphics used directly (using FontAwesome fonts). NO Mermaid JS used. -->
 </head>
-<body class="antialiased selection:bg-teal-100 selection:text-teal-900">
+<body>
 
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 bg-[#fdfbf7]/90 backdrop-blur-sm border-b border-gray-200">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex-shrink-0 flex items-center">
-                    <span class="text-xl font-bold serif-font text-teal-800">M. Tamiminezhad</span>
-                </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#hero" class="nav-link text-gray-600 hover:text-teal-700 font-medium">Vision</a>
-                    <a href="#about" class="nav-link text-gray-600 hover:text-teal-700 font-medium">About</a>
-                    <a href="#skills" class="nav-link text-gray-600 hover:text-teal-700 font-medium">Competencies</a>
-                    <a href="#research" class="nav-link text-gray-600 hover:text-teal-700 font-medium">Research</a>
-                    <a href="#contact" class="px-4 py-2 rounded-md bg-teal-700 text-white hover:bg-teal-800 transition-colors">Contact</a>
-                </div>
-                <!-- Mobile menu button -->
-                <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-teal-700 focus:outline-none">
-                        <i class="fas fa-bars text-2xl"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <!-- Mobile Menu (Hidden by default) -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#hero" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-teal-50">Vision</a>
-                <a href="#about" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-teal-50">About</a>
-                <a href="#research" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-teal-50">Research</a>
-                <a href="#contact" class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-teal-50">Contact</a>
-            </div>
+    <div id="tooltip"></div>
+
+    <nav>
+        <div class="container">
+            <h4 class="code-font" style="color: #fff;">MT<span style="color: var(--accent-primary);">.v2.5</span></h4>
+            <ul class="nav-links">
+                <li><a href="#hero" class="active">Entry</a></li>
+                <li><a href="#research">Genomics</a></li>
+                <li><a href="#pathology">Pathology</a></li>
+                <li><a href="#tech">Stack</a></li>
+                <li><a href="#innovation">Innovation</a></li>
+            </ul>
         </div>
     </nav>
 
-    <!-- SECTION 1: HERO & VISION -->
-    <section id="hero" class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto min-h-[80vh] flex flex-col justify-center">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div class="space-y-6 animate-fade-in-up">
-                <div class="inline-block px-3 py-1 bg-teal-100 text-teal-800 text-sm font-semibold rounded-full mb-2">
-                    Bioinformatics & AI Researcher
-                </div>
-                <h1 class="text-4xl md:text-6xl font-bold text-gray-900 leading-tight">
-                    Bridging <span class="text-teal-700 italic">Computer Science</span> <br> and <span class="text-amber-600 italic">Biology</span>.
-                </h1>
-                <p class="text-lg text-gray-600 max-w-xl leading-relaxed">
-                    Dedicated to solving complex healthcare problems through robust, multi-modal systems. My goal is to advance computational medicine for disease diagnosis and prognosis.
-                </p>
-                <div class="flex flex-wrap gap-4 pt-4">
-                    <a href="#research" class="px-6 py-3 bg-teal-700 text-white font-medium rounded-lg shadow-lg hover:bg-teal-800 transition-transform transform hover:-translate-y-1">
-                        View Research
-                    </a>
-                    <a href="https://github.com/M7tnj" target="_blank" class="px-6 py-3 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg shadow-sm hover:bg-gray-50 transition-colors">
-                        <i class="fab fa-github mr-2"></i>GitHub
-                    </a>
-                    <a href="https://linkedin.com/in/mostafa-tamiminezhad" target="_blank" class="px-6 py-3 bg-[#0077b5] border border-transparent text-white font-medium rounded-lg shadow-sm hover:bg-[#006396] transition-colors">
-                        <i class="fab fa-linkedin mr-2"></i>LinkedIn
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Contextual Graphic -->
-            <div class="bg-white p-6 rounded-2xl shadow-xl border border-gray-100 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-teal-500 to-amber-500"></div>
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-bold text-gray-800">Core Focus Areas</h3>
-                    <i class="fas fa-dna text-teal-200 text-4xl"></i>
-                </div>
-                <!-- Chart Container -->
-                <div class="chart-container h-64">
-                    <canvas id="heroChart"></canvas>
-                </div>
-                <p class="text-sm text-gray-500 mt-4 text-center italic">
-                    Integration of clinical data with computational logic.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION 2: ABOUT & PHILOSOPHY -->
-    <section id="about" class="py-20 bg-white border-t border-gray-100">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">The Journey</h2>
-                <div class="w-24 h-1 bg-amber-500 mx-auto rounded"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
-                <!-- Text Narrative -->
-                <div class="md:col-span-7 space-y-6 text-gray-700 leading-relaxed">
-                    <p class="text-xl font-serif text-teal-800">
-                        "What is the lasting impact of my work?"
+    <main>
+        <!-- HERO -->
+        <section id="hero">
+            <div class="container">
+                <div data-reveal class="active">
+                    <p class="code-font" style="margin-bottom: 1rem;"></p>
+                    <h1 class="hero-title">Building <span class="gradient-text">Intelligence</span> for Precision Oncology.</h1>
+                    <p class="hero-tagline">
+                        Mostafa Tamiminezhad is a Computational Oncology Researcher specializing in the fusion of 
+                        <span style="color: #fff;">High-Throughput Genomics</span> and <span style="color: #fff;">Deep Learning</span> 
+                        to decode the complexities of Breast Cancer metastasis.
                     </p>
-                    <p>
-                        This question led me to the intersection of Computer Science and Biology. While I initially viewed these fields as distinct paths, the Corona Pandemic became a time of self-discovery. Through thousands of hours of dedicated study, I connected the dots and discovered the key: <strong>Bioinformatics</strong>.
-                    </p>
-                    <p>
-                        My education extended far beyond the classroom. While mastering R programming for microarray data, I realized technical skill alone was insufficient without understanding the clinical logic. I pushed myself into the clinical world of cancer and oncology, participating in tumor board examinations and earning CME credits to bridge the gap between code and cure.
-                    </p>
-                    <div class="grid grid-cols-2 gap-4 pt-4">
-                        <div class="p-4 bg-teal-50 rounded-lg border-l-4 border-teal-600">
-                            <div class="text-2xl font-bold text-teal-800">2024</div>
-                            <div class="text-sm text-teal-600">B.Sc. Biotechnology</div>
-                        </div>
-                        <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-600">
-                            <div class="text-2xl font-bold text-amber-800">32</div>
-                            <div class="text-sm text-amber-600">DEGs Identified</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Skills Chart -->
-                <div class="md:col-span-5">
-                    <div class="bg-gray-50 p-6 rounded-xl shadow-inner h-full">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4 text-center">Competency Matrix</h3>
-                        <div class="chart-container">
-                            <canvas id="skillsChart"></canvas>
-                        </div>
-                        <div class="mt-4 text-xs text-center text-gray-500">
-                            Comparing proficiency in technical vs. domain-specific areas.
-                        </div>
+                    <div class="btn-group">
+                        <a href="#research" class="btn btn-primary">View Data Visuals</a>
+                        <a href="https://linkedin.com/in/mostafa-tamiminezhad" class="btn btn-secondary">Connect on LinkedIn</a>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- SECTION 3: RESEARCH & PROJECTS (INTERACTIVE) -->
-    <section id="research" class="py-20 bg-[#fdfbf7]">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Research & Experience</h2>
-                <p class="text-gray-600 max-w-2xl">
-                    Explore my key projects. Click on a project title to see the details, methodologies, and outcomes visualized.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <!-- Sidebar / Selector -->
-                <div class="lg:col-span-4 space-y-4">
-                    <!-- Project 1 Button -->
-                    <button onclick="updateProject('pathology')" id="btn-pathology" class="w-full text-left p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-all active-project border border-gray-100 group">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-bold text-teal-600 uppercase tracking-wider">Current Research</span>
-                            <i class="fas fa-microscope text-gray-400 group-hover:text-teal-600 transition-colors"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-teal-800">AI in Digital Pathology</h3>
-                        <p class="text-sm text-gray-500 mt-2">Systematic review of H&E slide analysis.</p>
-                    </button>
-
-                    <!-- Project 2 Button -->
-                    <button onclick="updateProject('breastcancer')" id="btn-breastcancer" class="w-full text-left p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-all border border-gray-100 group">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-bold text-amber-600 uppercase tracking-wider">Undergraduate Thesis</span>
-                            <i class="fas fa-chart-bar text-gray-400 group-hover:text-amber-600 transition-colors"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-800 group-hover:text-amber-800">HER2+ Breast Cancer Analysis</h3>
-                        <p class="text-sm text-gray-500 mt-2">Differential gene expression with R.</p>
-                    </button>
-                </div>
-
-                <!-- Content Area -->
-                <div class="lg:col-span-8">
-                    <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 h-full flex flex-col">
-                        
-                        <!-- Dynamic Header -->
-                        <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-6 pb-6 border-b border-gray-100">
+        <!-- VOLCANO PLOT SECTION -->
+        <section id="research">
+            <div class="container">
+                <div data-reveal>
+                    <h4 class="code-font">Module_01: Genomic_Metastasis_Analysis</h4>
+                    <h2>High-Throughput <span style="color: var(--accent-primary);">Filtering</span></h2>
+                    <p style="max-width: 800px; color: var(--text-muted); margin-bottom: 2rem;">
+                        Integration of 4 GEO Microarray datasets (GSE profiles) to identify master regulators in HER2+/HR- Breast Cancer. 
+                        My analysis identified 32 shared DEGs across clinical metastasis categories.
+                    </p>
+                    
+                    <div class="chart-container">
+                        <div class="chart-header">
                             <div>
-                                <h3 id="project-title" class="text-2xl font-bold text-gray-900">AI in Digital Pathology</h3>
-                                <div id="project-role" class="text-teal-700 font-medium mt-1">Postgraduate Researcher</div>
+                                <h3 style="font-size: 1rem;">Differential Gene Expression Volcano Plot</h3>
+                                <p class="code-font" style="font-size: 0.7rem;">Interactive: Hover over nodes to see Log2FoldChange & p-values</p>
                             </div>
-                            <div id="project-date" class="mt-2 md:mt-0 px-3 py-1 bg-gray-100 text-gray-600 rounded text-sm font-mono">
-                                2024 - Present
+                            <div style="text-align: right;">
+                                <span class="tag" style="background: rgba(191, 255, 0, 0.1); color: var(--accent-primary); padding: 4px 12px; border-radius: 4px; font-size: 0.7rem;">HER2+ Sample Size: N=32 Shared</span>
                             </div>
                         </div>
+                        
+                        <svg id="volcanoPlot" class="volcano-svg" viewBox="0 0 1000 400">
+                            <!-- Axes -->
+                            <line x1="100" y1="350" x2="900" y2="350" stroke="#333" stroke-width="2" />
+                            <line x1="500" y1="50" x2="500" y2="350" stroke="#222" stroke-dasharray="4" />
+                            <text x="500" y="380" fill="#666" text-anchor="middle" font-size="12">Log2 Fold Change</text>
+                            <text x="50" y="200" fill="#666" text-anchor="middle" font-size="12" transform="rotate(-90, 50, 200)">-Log10 (P-Value)</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-                        <!-- Dynamic Body -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 flex-grow">
-                            <div class="space-y-4">
-                                <div>
-                                    <h4 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Objective</h4>
-                                    <p id="project-desc" class="text-gray-700 leading-relaxed">
-                                        Conducting a systematic review of literature across multiple databases to examine emerging trends in the application of artificial intelligence (AI) for digital pathology and disease diagnosis using hematoxylin and eosin (H&E) slide images.
-                                    </p>
-                                </div>
-                                
-                                <div>
-                                    <h4 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Key Technologies</h4>
-                                    <div id="project-tech" class="flex flex-wrap gap-2">
-                                        <span class="px-3 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">Systematic Review</span>
-                                        <span class="px-3 py-1 bg-green-50 text-green-700 text-xs rounded-full">Deep Learning</span>
-                                        <span class="px-3 py-1 bg-purple-50 text-purple-700 text-xs rounded-full">H&E Staining</span>
-                                    </div>
-                                </div>
+        <!-- DIGITAL PATHOLOGY -->
+        <section id="pathology">
+            <div class="container">
+                <div class="innovation-layout">
+                    <div data-reveal>
+                        <h4 class="code-font">Module_02: Pathological_AI</h4>
+                        <h2>Digital <span style="color: var(--accent-secondary);">Pathomics</span></h2>
+                        <p style="color: var(--text-muted);">
+                            Conducting systematic reviews on AI applications for H&E slide analysis. 
+                            My work focuses on bridging the gap between pixel-level data and clinical outcome prediction using CNNs and Vision Transformers.
+                        </p>
+                        <div style="margin-top: 2rem;">
+                            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                                <i class="fa-solid fa-microscope" style="color: var(--accent-secondary);"></i>
+                                <span>Tissue Morphometry Analysis</span>
                             </div>
-
-                            <!-- Dynamic Chart Area -->
-                            <div class="flex flex-col">
-                                <h4 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2 text-center">Data Visualization</h4>
-                                <div class="bg-gray-50 rounded-xl p-4 flex-grow flex items-center justify-center border border-gray-100">
-                                    <div class="chart-container" style="height: 250px;">
-                                        <canvas id="projectChart"></canvas>
-                                    </div>
-                                </div>
-                                <p id="chart-caption" class="text-xs text-center text-gray-400 mt-2">
-                                    Distribution of AI methodologies in pathology literature.
-                                </p>
+                            <div style="display: flex; gap: 1rem;">
+                                <i class="fa-solid fa-brain" style="color: var(--accent-secondary);"></i>
+                                <span>Multi-instance Learning (MIL) for WSI</span>
                             </div>
+                        </div>
+                    </div>
+                    
+                    <div class="multi-modal-graphic" data-reveal>
+                        <!-- Node System representing Multi-modal fusion -->
+                        <div class="node node-center">
+                            <i class="fa-solid fa-bolt" style="color: var(--accent-secondary); font-size: 1.5rem; margin-bottom: 5px;"></i>
+                            <strong>AI FUSION</strong>
+                            <span>Inference</span>
+                        </div>
+                        <div class="node" style="top: 20px; left: 50px;">
+                            <i class="fa-solid fa-dna"></i>
+                            Genomics
+                        </div>
+                        <div class="node" style="bottom: 20px; left: 50px;">
+                            <i class="fa-solid fa-file-medical"></i>
+                            Clinical
+                        </div>
+                        <div class="node" style="top: 200px; right: 20px;">
+                            <i class="fa-solid fa-image"></i>
+                            H&E Slides
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- SECTION 4: CERTIFICATIONS & EDUCATION -->
-    <section class="py-20 bg-white border-t border-gray-200">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-gray-900 mb-12 text-center">Education & Certifications</h2>
-            
-            <div class="relative border-l-2 border-teal-200 ml-4 md:ml-0 space-y-12">
+        <!-- TECH STACK -->
+        <section id="tech" style="background: rgba(255,255,255,0.01);">
+            <div class="container">
+                <div data-reveal style="text-align: center;">
+                    <h4 class="code-font">Module_03: Core_Capabilities</h4>
+                    <h2>Tools of the <span class="gradient-text">Trade</span></h2>
+                </div>
                 
-                <!-- Education Item -->
-                <div class="relative pl-8 md:pl-12">
-                    <div class="absolute -left-[9px] top-0 w-5 h-5 bg-teal-600 rounded-full border-4 border-white shadow-sm"></div>
-                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                        <h3 class="text-xl font-bold text-gray-900">B.Sc. in Biotechnology</h3>
-                        <span class="text-sm text-gray-500 font-mono">2024</span>
+                <div class="tech-grid">
+                    <div class="tech-card" data-reveal>
+                        <i class="fa-brands fa-python"></i>
+                        <h3>Python & PyTorch</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Deep learning architectures for medical image segmentation and survival analysis.</p>
+                        <span class="code-font">import torch.nn as nn</span>
                     </div>
-                    <p class="text-teal-700 font-medium">Zand Institute of Higher Education</p>
-                    <p class="text-gray-600 mt-2">Shiraz, Fars, Iran</p>
-                </div>
-
-                <!-- Cert Item 1 -->
-                <div class="relative pl-8 md:pl-12">
-                    <div class="absolute -left-[9px] top-0 w-5 h-5 bg-amber-400 rounded-full border-4 border-white shadow-sm"></div>
-                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                        <h3 class="text-lg font-bold text-gray-800">CS50 Programming with R and Python</h3>
-                        <span class="text-sm text-gray-500 font-mono">2025</span>
+                    <div class="tech-card" data-reveal>
+                        <i class="fa-brands fa-r-project"></i>
+                        <h3>Statistical R</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Expertise in Bioconductor, DESeq2, and ComplexHeatmap for large-scale omics.</p>
+                        <span class="code-font">library(biomaRt)</span>
                     </div>
-                    <p class="text-gray-600">Harvard University</p>
-                </div>
-
-                <!-- Cert Item 2 -->
-                <div class="relative pl-8 md:pl-12">
-                    <div class="absolute -left-[9px] top-0 w-5 h-5 bg-gray-400 rounded-full border-4 border-white shadow-sm"></div>
-                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                        <h3 class="text-lg font-bold text-gray-800">Biomedical Image Analysis in Python</h3>
-                        <span class="text-sm text-gray-500 font-mono">2024</span>
+                    <div class="tech-card" data-reveal>
+                        <i class="fa-solid fa-diagram-project"></i>
+                        <h3>Graph AI</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Applying Graph Neural Networks (GNN) to biological interaction networks.</p>
+                        <span class="code-font">nodes.degree()</span>
                     </div>
-                    <p class="text-gray-600">Data Camp</p>
                 </div>
-
-                 <!-- Cert Item 3 -->
-                 <div class="relative pl-8 md:pl-12">
-                    <div class="absolute -left-[9px] top-0 w-5 h-5 bg-gray-400 rounded-full border-4 border-white shadow-sm"></div>
-                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-2">
-                        <h3 class="text-lg font-bold text-gray-800">RNA-Seq and ChIP-seq Analysis in R</h3>
-                        <span class="text-sm text-gray-500 font-mono">2023</span>
-                    </div>
-                    <p class="text-gray-600">Data Camp</p>
-                </div>
-
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- FOOTER / CONTACT -->
-    <section id="contact" class="bg-gray-900 text-white py-16">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl font-bold serif-font mb-6">Let's Connect</h2>
-            <p class="text-gray-400 max-w-xl mx-auto mb-10">
-                I am eager to contribute my skills to robust, multi-modal systems for disease diagnosis.
+        <!-- INNOVATION -->
+        <section id="innovation">
+            <div class="container">
+                <div data-reveal>
+                    <h4 class="code-font">Module_04: Venture_History</h4>
+                    <h2>Translational <span style="color: var(--accent-primary);">Impact</span></h2>
+                </div>
+
+                <div class="project-masonry">
+                    <div class="project-item" data-reveal>
+                        <div class="project-header">
+                            <i class="fa-solid fa-user-doctor" style="font-size: 3rem; color: var(--accent-primary); z-index: 1;"></i>
+                            <div class="project-overlay"></div>
+                        </div>
+                        <div class="project-body">
+                            <span class="code-font">AWARD: 1ST PLACE AI STARTUP</span>
+                            <h3 style="margin: 0.5rem 0;">Doctor in Pocket</h3>
+                            <p style="color: var(--text-muted); font-size: 0.85rem;">Winner of best AI idea for algorithm-driven triage using patient para-clinical data.</p>
+                        </div>
+                    </div>
+                    <div class="project-item" data-reveal>
+                        <div class="project-header">
+                            <i class="fa-solid fa-droplet" style="font-size: 3rem; color: var(--accent-secondary); z-index: 1;"></i>
+                            <div class="project-overlay"></div>
+                        </div>
+                        <div class="project-body">
+                            <span class="code-font">ML MODEL: CLASSIFICATION</span>
+                            <h3 style="margin: 0.5rem 0;">preDiabet</h3>
+                            <p style="color: var(--text-muted); font-size: 0.85rem;">Neural network system for predicting Type 2 Diabetes onset from routine blood metrics.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact" style="border-top: 1px solid var(--border); padding: 80px 0;">
+        <div class="container" style="text-align: center;">
+            <h2 class="gradient-text" style="font-size: 3rem;">Let's Decode Together.</h2>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">Searching for PhD opportunities in Multi-Modal Medical AI.</p>
+            
+            <div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 3rem;">
+                <a href="mailto:tamiminezhad.m@yahoo.com" style="color: #fff; font-size: 1.5rem;"><i class="fa-solid fa-envelope"></i></a>
+                <a href="https://linkedin.com/in/mostafa-tamiminezhad" style="color: #fff; font-size: 1.5rem;"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="https://github.com/M7tnj" style="color: #fff; font-size: 1.5rem;"><i class="fa-brands fa-github"></i></a>
+            </div>
+            
+            <p style="font-size: 0.7rem; color: #444; letter-spacing: 2px; text-transform: uppercase;">
+                Designed by Mostafa Tamiminezhad &copy; 2024 | Computational Oncology v2.5
             </p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                <div class="p-6 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
-                    <i class="fas fa-envelope text-2xl text-teal-400 mb-4"></i>
-                    <h3 class="font-bold mb-2">Email</h3>
-                    <a href="mailto:tamiminezhad.m@yahoo.com" class="text-gray-300 hover:text-white">tamiminezhad.m@yahoo.com</a>
-                </div>
-                <div class="p-6 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
-                    <i class="fas fa-phone text-2xl text-teal-400 mb-4"></i>
-                    <h3 class="font-bold mb-2">Phone</h3>
-                    <p class="text-gray-300">+98 939 899 1947</p>
-                </div>
-                <div class="p-6 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors">
-                    <i class="fas fa-map-marker-alt text-2xl text-teal-400 mb-4"></i>
-                    <h3 class="font-bold mb-2">Location</h3>
-                    <p class="text-gray-300">Shiraz, Fars Province, Iran</p>
-                </div>
-            </div>
-
-            <div class="flex justify-center space-x-6">
-                <a href="https://github.com/M7tnj" class="text-gray-400 hover:text-white transition-colors text-2xl"><i class="fab fa-github"></i></a>
-                <a href="https://linkedin.com/in/mostafa-tamiminezhad" class="text-gray-400 hover:text-white transition-colors text-2xl"><i class="fab fa-linkedin"></i></a>
-                <a href="https://kaggle.com/mostafatamiminezhad" class="text-gray-400 hover:text-white transition-colors text-2xl"><i class="fab fa-kaggle"></i></a>
-            </div>
-            
-            <div class="mt-12 text-gray-600 text-sm">
-                &copy; 2024 Mostafa Tamiminezhad. All rights reserved.
-            </div>
         </div>
-    </section>
+    </footer>
 
-    <!-- JavaScript Logic -->
     <script>
-        // --- Data Handling ---
-        const projects = {
-            pathology: {
-                title: "AI in Digital Pathology",
-                role: "Postgraduate Researcher",
-                date: "2024 - Present",
-                desc: "Conducting a systematic review of literature across multiple databases to examine emerging trends in the application of artificial intelligence (AI) for digital pathology and disease diagnosis using hematoxylin and eosin (H&E) slide images.",
-                tags: ["Systematic Review", "Deep Learning", "H&E Staining", "Medical Imaging"],
-                chartType: 'doughnut',
-                chartData: {
-                    labels: ['Supervised Learning', 'Weakly Supervised', 'Unsupervised', 'Other'],
-                    datasets: [{
-                        data: [45, 30, 15, 10],
-                        backgroundColor: ['#0f766e', '#0d9488', '#5eead4', '#ccfbf1']
-                    }]
-                },
-                caption: "Trends in AI methodologies found in literature review."
-            },
-            breastcancer: {
-                title: "HER2+ Breast Cancer Analysis",
-                role: "Undergraduate Thesis",
-                date: "2021 - 2023",
-                desc: "Integrated and filtered four microarray profile datasets obtained from GEO (Gene Expression Omnibus) database. Grouped cases into three major clinical categories and conducted differential gene expression analysis with R. Identified 32 shared differential expressed genes (DEGs).",
-                tags: ["R Programming", "Microarray Analysis", "GEO Database", "Oncology"],
-                chartType: 'bar',
-                chartData: {
-                    labels: ['Dataset 1', 'Dataset 2', 'Dataset 3', 'Dataset 4'],
-                    datasets: [{
-                        label: 'Samples Processed',
-                        data: [120, 95, 110, 85],
-                        backgroundColor: '#d97706'
-                    }, {
-                        label: 'DEGs Identified',
-                        data: [28, 35, 30, 32],
-                        backgroundColor: '#1f2937'
-                    }]
-                },
-                caption: "Sample volume vs. relevant genes identified across 4 datasets."
-            }
+        // Data for Volcano Plot (Representative of HER2+/HR- study)
+        const genes = [
+            { id: 'ERBB2', fc: 4.2, p: 8.5, type: 'up' },
+            { id: 'GRB7', fc: 3.8, p: 7.2, type: 'up' },
+            { id: 'PTEN', fc: -3.5, p: 6.8, type: 'down' },
+            { id: 'TP53', fc: 1.2, p: 4.1, type: 'sig' },
+            { id: 'BRCA1', fc: -1.5, p: 5.2, type: 'sig' },
+            { id: 'MYC', fc: 2.8, p: 6.1, type: 'up' },
+            { id: 'CDH1', fc: -4.1, p: 7.9, type: 'down' },
+            // Generate some background noise dots
+            ...Array.from({ length: 40 }, () => ({
+                id: 'Gene_' + Math.floor(Math.random()*100),
+                fc: (Math.random() - 0.5) * 6,
+                p: Math.random() * 4,
+                type: 'noise'
+            }))
+        ];
+
+        const svg = document.getElementById('volcanoPlot');
+        const tooltip = document.getElementById('tooltip');
+
+        function drawVolcano() {
+            genes.forEach(gene => {
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                
+                // Scale data to SVG coordinates
+                const cx = 500 + (gene.fc * 60);
+                const cy = 350 - (gene.p * 30);
+                
+                circle.setAttribute('cx', cx);
+                circle.setAttribute('cy', cy);
+                circle.setAttribute('r', gene.type === 'noise' ? 2 : 5);
+                circle.setAttribute('class', 'gene-dot');
+                
+                let color = '#333';
+                if (gene.type === 'up') color = '#bfff00';
+                if (gene.type === 'down') color = '#ff3e3e';
+                if (gene.type === 'sig') color = '#00f2ff';
+                
+                circle.setAttribute('fill', color);
+                
+                circle.addEventListener('mouseenter', (e) => {
+                    if(gene.type === 'noise') return;
+                    tooltip.style.opacity = '1';
+                    tooltip.innerHTML = `<strong>${gene.id}</strong><br/>Log2FC: ${gene.fc.toFixed(2)}<br/>-Log10P: ${gene.p.toFixed(2)}`;
+                });
+
+                circle.addEventListener('mousemove', (e) => {
+                    tooltip.style.left = (e.pageX + 15) + 'px';
+                    tooltip.style.top = (e.pageY - 40) + 'px';
+                });
+
+                circle.addEventListener('mouseleave', () => {
+                    tooltip.style.opacity = '0';
+                });
+
+                svg.appendChild(circle);
+            });
+        }
+
+        // Intersection Observer for reveal animations
+        const revealCallback = (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
         };
+        const revealObserver = new IntersectionObserver(revealCallback, { threshold: 0.1 });
+        document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
 
-        let projectChartInstance = null;
-
-        // --- Chart Initialization Functions ---
-
-        function initHeroChart() {
-            const ctx = document.getElementById('heroChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    datasets: [{
-                        label: 'Model Accuracy',
-                        data: [65, 72, 78, 85, 89, 94],
-                        borderColor: '#0f766e',
-                        backgroundColor: 'rgba(15, 118, 110, 0.1)',
-                        fill: true,
-                        tension: 0.4
-                    }, {
-                        label: 'Clinical Validation',
-                        data: [20, 35, 50, 60, 80, 88],
-                        borderColor: '#d97706',
-                        borderDash: [5, 5],
-                        fill: false,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    },
-                    scales: {
-                        y: { display: false },
-                        x: { display: false }
-                    }
+        // Navigation Highlight
+        window.addEventListener('scroll', () => {
+            let current = "";
+            document.querySelectorAll('section').forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id');
                 }
             });
-        }
-
-        function initSkillsChart() {
-            const ctx = document.getElementById('skillsChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: ['R Programming', 'Python', 'Genomic Analysis', 'Clinical Oncology', 'Image Analysis'],
-                    datasets: [{
-                        label: 'Proficiency Level',
-                        data: [90, 85, 80, 75, 70],
-                        backgroundColor: 'rgba(15, 118, 110, 0.2)',
-                        borderColor: '#0f766e',
-                        pointBackgroundColor: '#0f766e',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: '#0f766e'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            angleLines: { color: '#e5e7eb' },
-                            grid: { color: '#e5e7eb' },
-                            pointLabels: {
-                                font: { size: 12, family: 'Inter' },
-                                color: '#4b5563'
-                            },
-                            suggestedMin: 0,
-                            suggestedMax: 100,
-                            ticks: { display: false }
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false }
-                    }
+            document.querySelectorAll('.nav-links a').forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href').includes(current)) {
+                    a.classList.add('active');
                 }
-            });
-        }
-
-        function updateProject(key) {
-            const data = projects[key];
-            
-            // UI Updates
-            document.querySelectorAll('.active-project').forEach(el => {
-                el.classList.remove('active-project', 'bg-teal-50', 'border-teal-500');
-                el.classList.add('border-gray-100');
-            });
-            
-            const btn = document.getElementById(`btn-${key}`);
-            btn.classList.add('active-project');
-            btn.classList.remove('border-gray-100');
-
-            // Content Updates
-            document.getElementById('project-title').textContent = data.title;
-            document.getElementById('project-role').textContent = data.role;
-            document.getElementById('project-date').textContent = data.date;
-            document.getElementById('project-desc').textContent = data.desc;
-            document.getElementById('chart-caption').textContent = data.caption;
-
-            // Tag Updates
-            const techContainer = document.getElementById('project-tech');
-            techContainer.innerHTML = '';
-            data.tags.forEach((tag, index) => {
-                const colors = [
-                    'bg-blue-50 text-blue-700', 
-                    'bg-green-50 text-green-700', 
-                    'bg-purple-50 text-purple-700',
-                    'bg-amber-50 text-amber-700'
-                ];
-                const span = document.createElement('span');
-                span.className = `px-3 py-1 ${colors[index % colors.length]} text-xs rounded-full animate-fade-in`;
-                span.textContent = tag;
-                techContainer.appendChild(span);
-            });
-
-            // Chart Update
-            if (projectChartInstance) {
-                projectChartInstance.destroy();
-            }
-
-            const ctx = document.getElementById('projectChart').getContext('2d');
-            projectChartInstance = new Chart(ctx, {
-                type: data.chartType,
-                data: data.chartData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom', labels: { boxWidth: 12 } }
-                    }
-                }
-            });
-        }
-
-        // --- Event Listeners ---
-        document.addEventListener('DOMContentLoaded', () => {
-            initHeroChart();
-            initSkillsChart();
-            updateProject('pathology'); // Load default project
-
-            // Mobile Menu Toggle
-            const btn = document.getElementById('mobile-menu-btn');
-            const menu = document.getElementById('mobile-menu');
-            btn.addEventListener('click', () => {
-                menu.classList.toggle('hidden');
             });
         });
 
+        window.onload = drawVolcano;
     </script>
 </body>
 </html>
